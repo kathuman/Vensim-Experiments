@@ -1,0 +1,462 @@
+{UTF-8}
+CS Fraction=
+	"Compromised Systems (CS)"/"Uncompromised Systems (US)"
+	~	
+	~		|
+
+"Feature Disruption (DF)"=
+	PULSE(20, 0 )
+	~	
+	~		|
+
+"Compromised Systems (CS)"= INTEG (
+	"CS Disruption (DCS)"+"Infection Rate (IR)"-"Recovery Rate (RR)",
+		CSi)
+	~	System
+	~		|
+
+"Unknown Vulnerable Features (UVF)"= INTEG (
+	"Feature Disruption (DF)"+Vulnerability Activation VC-"Vulnerable Feature Discovery (VFD)"\
+		+"Feature Disruption (DF)",
+		UVFi)
+	~	Feature
+	~		|
+
+"CS Disruption (DCS)"=
+	PULSE(20, 1 )
+	~	
+	~		|
+
+Vulnerability Activation VC=
+	("Safe Features (SF)"*"Attackers (A)"*"Attacker effectiveness (AE)")/"Vulnerability Activation Time (VCT)"
+	~	Feature/day
+	~		|
+
+"Infection Rate (IR)"=
+	"Contacts Between Compromised and Uncompromised Systems (CCUS)"*"Infectivity (IF)"
+	~	System/day
+	~		|
+
+"Safe Features (SF)"= INTEG (
+	"Vulnerable Feature Solution (VFS)"-Vulnerability Activation VC,
+		SFi)
+	~	Feature
+	~		|
+
+"Uncompromised Systems (US)"= INTEG (
+	"Recovery Rate (RR)"-"Infection Rate (IR)",
+		"Total Number of Systems (TNS)"-CSi)
+	~	System
+	~		|
+
+"Attackers (A)"= INTEG (
+	"Attacker growth rate (AGR)",
+		Hi)
+	~	Programmer
+	~		|
+
+Hi=
+	0
+	~	Programmer
+	~		|
+
+"Solution Developers (D)"= INTEG (
+	"Solution Developer growth Rate (DGR)",
+		Di)
+	~	Programmer
+	~		|
+
+Di=
+	0
+	~	Programmer
+	~		|
+
+"Attacker growth rate (AGR)"=
+	IF THEN ELSE( "Total Potential Attackers (TPA)"-"Attackers (A)">0 , ("Total Potential Attackers (TPA)"\
+		-"Attackers (A)")/"Average learning time (ALT)" , ("Total Potential Attackers (TPA)"
+	-"Attackers (A)")/"Average quitting time (AQT)" )
+	~	Programmer/day
+	~		|
+
+"Ratio Hackers / Solution Developers"=
+	IF THEN ELSE("Solution Developers (D)"=0, 0 , "Attackers (A)"/"Solution Developers (D)"\
+		 )
+	~	Dmnl
+	~		|
+
+"Average quitting time (AQT)"=
+	360
+	~	day
+	~		|
+
+"Vulnerability Activation Time (VCT)"=
+	360
+	~	day
+	~		|
+
+"Average learning time (ALT)"=
+	30
+	~	day
+	~		|
+
+"Average training time (ATT)"=
+	120
+	~	day
+	~		|
+
+"Infection effect on Attacker Numbers (IEA)"=
+	0.45
+	~	Programmer/System
+	~		|
+
+"Solution adoption time (SAT)"=
+	60
+	~	day
+	~		|
+
+"Developer Effectiveness (DE)"=
+	0.8
+	~	1/Programmer
+	~		|
+
+"Attacker effectiveness (AE)"=
+	0.00075
+	~	1/Programmer
+	~		|
+
+"Recovery Rate (RR)"=
+	("Compromised Systems (CS)"/"Solution adoption time (SAT)")*"Developer Effectiveness (DE)"\
+		*"Solution Developers (D)"
+	~	System/day
+	~		|
+
+"Total Potential Attackers (TPA)"=
+	MAX(0,"Compromised Systems (CS)"*"Infection effect on Attacker Numbers (IEA)")
+	~	Programmer
+	~		|
+
+"Infection effect on developers needed (IED)"=
+	1.5
+	~	Programmer/System
+	~		|
+
+"Solution Developer growth Rate (DGR)"=
+	("Total developers needed (TDN)"-"Solution Developers (D)")/"Average training time (ATT)"
+	~	Programmer/day
+	~		|
+
+"Total developers needed (TDN)"=
+	MAX(0,"Compromised Systems (CS)"*"Infection effect on developers needed (IED)")
+	~	Programmer
+	~		|
+
+"Contacts Between Compromised and Uncompromised Systems (CCUS)"=
+	"Probability of Contact w Infected (POTC)"*"Suceptible Contacts (SC)"
+	~	System/day
+	~		|
+
+CSi=
+	0
+	~	System
+	~		|
+
+"Discovery time (DT)"=
+	50
+	~	day
+	~		|
+
+"Frequency of Connections (FC)"=
+	1500
+	~	1/day
+	~		|
+
+"Infectivity (IF)"=
+	("Known Vulnerable Features (KVF)"+"Unknown Vulnerable Features (UVF)")/"Safe Features (SF)"
+	~	Dmnl
+	~		|
+
+"Known Vulnerable Features (KVF)"= INTEG (
+	"Vulnerable Feature Discovery (VFD)"-"Vulnerable Feature Solution (VFS)",
+		KVFi)
+	~	Feature
+	~		|
+
+KVFi=
+	0
+	~	Feature
+	~		|
+
+"Probability of Contact w Infected (POTC)"=
+	"Compromised Systems (CS)"/"Total Number of Systems (TNS)"
+	~	Dmnl
+	~		|
+
+SFi=
+	2000
+	~	Feature
+	~		|
+
+"Solution Time (ST)"=
+	15
+	~	day
+	~		|
+
+"Suceptible Contacts (SC)"=
+	"Uncompromised Systems (US)"*"Frequency of Connections (FC)"
+	~	System/day
+	~		|
+
+"Total Number of Systems (TNS)"=
+	5000
+	~	System
+	~		|
+
+UVFi=
+	0
+	~	Feature
+	~		|
+
+"Vulnerable Feature Discovery (VFD)"=
+	"Unknown Vulnerable Features (UVF)"/"Discovery time (DT)"
+	~	Feature/day
+	~		|
+
+"Vulnerable Feature Solution (VFS)"=
+	"Known Vulnerable Features (KVF)"/"Solution Time (ST)"
+	~	Feature/day
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 1000
+	~	day
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	day
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	day [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.0078125
+	~	day [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*MainModel
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,100,0
+10,1,"Uncompromised Systems (US)",464,-34,54,50,3,131,0,0,0,0,0,0
+10,2,"Compromised Systems (CS)",747,-33,58,49,3,131,0,0,0,0,0,0
+1,3,5,2,4,0,0,22,0,0,0,-1--1--1,,1|(649,4)|
+1,4,5,1,100,0,0,22,0,0,0,-1--1--1,,1|(557,4)|
+11,5,156,603,4,6,8,34,3,0,0,1,0,0,0
+10,6,"Infection Rate (IR)",603,23,59,11,40,3,0,0,-1,0,0,0
+1,7,9,1,4,0,0,22,0,0,0,-1--1--1,,1|(554,-73)|
+1,8,9,2,100,0,0,22,0,0,0,-1--1--1,,1|(646,-73)|
+11,9,236,597,-73,6,8,34,3,0,0,1,0,0,0
+10,10,"Recovery Rate (RR)",597,-46,48,19,40,3,0,0,-1,0,0,0
+10,11,"Frequency of Connections (FC)",317,38,47,35,8,131,0,0,0,0,0,0
+10,12,"Suceptible Contacts (SC)",456,79,47,19,8,131,0,0,0,0,0,0
+1,13,11,12,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(369,70)|
+1,14,1,12,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(432,30)|
+10,15,"Contacts Between Compromised and Uncompromised Systems (CCUS)",628,131,62,43,8,131,0,0,0,0,0,0
+10,16,"Total Number of Systems (TNS)",918,144,54,19,8,3,0,0,0,0,0,0
+10,17,"Probability of Contact w Infected (POTC)",774,119,53,35,8,131,0,0,0,0,0,0
+1,18,2,17,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(769,48)|
+1,19,16,17,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(862,99)|
+1,20,17,15,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(720,165)|
+1,21,12,15,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(539,150)|
+1,22,15,6,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(609,66)|
+10,23,"Infectivity (IF)",443,192,45,11,8,3,0,0,0,0,0,0
+1,24,23,6,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(580,62)|
+10,25,"Safe Features (SF)",505,458,37,35,3,131,0,0,0,0,0,0
+10,26,"Known Vulnerable Features (KVF)",405,334,39,36,3,131,0,0,0,0,0,0
+10,27,"Unknown Vulnerable Features (UVF)",691,341,39,36,3,131,0,0,0,0,0,0
+1,28,30,26,4,0,0,22,0,0,0,-1--1--1,,1|(499,335)|
+1,29,30,27,100,0,0,22,0,0,0,-1--1--1,,1|(609,335)|
+11,30,300,560,335,6,8,34,3,0,0,1,0,0,0
+10,31,"Vulnerable Feature Discovery (VFD)",560,377,37,34,40,131,0,0,-1,0,0,0
+1,32,34,25,4,0,0,22,0,0,0,-1--1--1,,1|(442,457)|
+1,33,34,26,100,0,0,22,0,0,0,-1--1--1,,1|(410,409)|
+11,34,332,410,457,6,8,34,3,0,0,1,0,0,0
+10,35,"Vulnerable Feature Solution (VFS)",410,505,47,40,40,131,0,0,-1,0,0,0
+1,36,27,23,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(518,222)|
+1,37,26,23,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(424,223)|
+1,38,25,23,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(465,246)|
+10,39,CSi,825,-67,14,11,8,3,0,0,0,0,0,0
+10,40,UVFi,774,314,19,11,8,3,0,0,0,0,0,0
+10,41,KVFi,338,276,20,11,8,3,0,0,0,0,0,0
+10,42,SFi,513,530,13,11,8,3,0,0,0,0,0,0
+1,43,39,2,1,0,0,0,0,64,1,-1--1--1,,1|(821,-57)|
+1,44,40,27,1,0,0,0,0,64,1,-1--1--1,,1|(748,337)|
+1,45,41,26,1,0,0,0,0,64,1,-1--1--1,,1|(371,278)|
+1,46,42,25,1,0,0,0,0,64,1,-1--1--1,,1|(483,499)|
+12,47,2034324,1448,128,267,251,3,188,0,0,1,0,0,0
+Features
+12,48,1051554,1448,615,267,232,3,188,0,0,1,0,0,0
+Systems
+1,49,27,31,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(627,411)|
+1,50,26,35,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(347,475)|
+10,51,"Discovery time (DT)",545,272,36,25,8,131,0,0,0,0,0,0
+10,52,"Solution Time (ST)",294,479,39,25,8,131,0,0,0,0,0,0
+1,53,51,31,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(520,316)|
+1,54,52,35,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(364,534)|
+10,55,"Solution Developers (D)",588,-244,42,33,3,131,0,0,0,0,0,0
+10,56,"Attackers (A)",943,271,37,27,3,131,0,0,0,0,0,0
+12,57,48,1070,272,10,8,0,3,0,0,-1,0,0,0
+1,58,60,56,4,0,0,22,0,0,0,-1--1--1,,1|(1004,274)|
+1,59,60,57,100,0,0,22,0,0,0,-1--1--1,,1|(1050,274)|
+11,60,48,1034,274,6,8,34,3,0,0,1,0,0,0
+10,61,"Attacker growth rate (AGR)",1034,313,51,31,40,131,0,0,-1,0,0,0
+1,62,56,61,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(974,352)|
+10,63,"Average learning time (ALT)",962,412,54,19,8,131,0,0,0,0,0,0
+1,64,63,61,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(1014,373)|
+10,65,"Total developers needed (TDN)",899,-149,45,36,8,131,0,0,0,0,0,0
+1,66,56,111,1,0,0,0,0,64,0,-1--1--1,,1|(835,344)|
+10,67,"Attacker effectiveness (AE)",812,540,50,28,8,131,0,0,0,0,0,0
+1,68,67,111,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(723,524)|
+12,69,48,732,-245,10,8,0,3,0,0,-1,0,0,0
+1,70,72,55,4,0,0,22,0,0,0,-1--1--1,,1|(653,-245)|
+1,71,72,69,100,0,0,22,0,0,0,-1--1--1,,1|(705,-245)|
+11,72,48,682,-245,6,8,34,3,0,0,1,0,0,0
+10,73,"Solution Developer growth Rate (DGR)",682,-195,51,42,40,131,0,0,-1,0,0,0
+1,74,55,73,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(687,-291)|
+1,75,65,73,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(744,-197)|
+10,76,"Average training time (ATT)",842,-268,44,33,8,131,0,0,0,0,0,0
+1,77,76,73,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(771,-235)|
+1,78,55,10,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(605,-201)|
+10,79,"Developer Effectiveness (DE)",418,-139,48,29,8,131,0,0,0,0,0,0
+1,80,2,10,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(659,-104)|
+10,81,"Solution adoption time (SAT)",480,-215,43,34,8,131,0,0,0,0,0,0
+1,82,79,10,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(551,-101)|
+1,83,81,10,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(572,-112)|
+10,84,"Total Number of Systems (TNS)",320,-46,58,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,85,84,1,1,0,0,0,0,64,1,-1--1--1,,1|(373,-27)|
+10,86,"Total Potential Attackers (TPA)",925,42,50,44,8,131,0,0,0,0,0,0
+1,87,2,65,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(836,-98)|
+1,88,2,86,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(882,7)|
+1,89,86,61,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(1055,232)|
+10,90,"Infection effect on developers needed (IED)",1010,-203,75,35,8,131,0,0,0,0,0,0
+1,91,90,65,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(973,-151)|
+10,92,"Infection effect on Attacker Numbers (IEA)",1045,-45,67,35,8,131,0,0,0,0,0,0
+1,93,92,86,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(954,-30)|
+12,94,2100032,1972,96,242,218,3,188,0,0,2,0,0,0
+"Infectivity (IF)",Graph
+12,95,1379172,1588,-291,360,160,3,188,0,0,2,0,0,0
+"Contacts Between Compromised and Uncompromised Systems (CCUS)",Graph
+10,96,"Average quitting time (AQT)",991,470,52,19,8,131,0,0,0,0,0,0
+1,97,96,61,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(1068,395)|
+10,98,"Vulnerability Activation Time (VCT)",822,443,62,31,8,131,0,0,0,0,0,0
+1,99,98,111,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(776,498)|
+12,100,3541730,1974,982,245,202,3,188,0,0,2,0,0,0
+"Ratio Hackers / Solution Developers",Graph
+12,101,3214072,1447,1047,267,196,3,188,0,0,1,0,0,0
+Programmers
+10,102,Di,541,-295,9,11,8,3,0,0,0,0,0,0
+1,103,102,55,1,0,0,0,0,64,1,-1--1--1,,1|(560,-287)|
+10,104,Hi,962,226,9,11,8,3,0,0,0,0,0,0
+1,105,104,56,1,0,0,0,0,64,1,-1--1--1,,1|(947,225)|
+10,106,CSi,337,-94,23,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,107,106,1,1,0,0,0,0,64,1,-1--1--1,,1|(376,-83)|
+1,108,110,27,4,0,0,22,0,0,0,-1--1--1,,1|(693,414)|
+1,109,110,25,100,0,0,22,0,0,0,-1--1--1,,1|(614,459)|
+11,110,268,693,459,6,8,34,3,0,0,1,0,0,0
+10,111,Vulnerability Activation VC,693,492,48,25,40,131,0,0,-1,0,0,0
+1,112,25,111,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(642,532)|
+12,113,4850152,1973,556,243,206,3,188,0,0,2,0,0,0
+"Infection Rate (IR)",Graph
+12,114,48,757,-156,10,8,0,3,0,0,-1,0,0,0
+1,115,117,2,4,0,0,22,0,0,0,-1--1--1,,1|(755,-108)|
+1,116,117,114,100,0,0,22,0,0,0,-1--1--1,,1|(755,-147)|
+11,117,48,755,-140,8,6,33,3,0,0,4,0,0,0
+10,118,"CS Disruption (DCS)",803,-140,40,30,40,131,0,2,-1,0,0,0,-1--1--1,0-0-0,|12||255-0-0
+12,119,48,684,216,10,8,0,3,0,0,-1,0,0,0
+1,120,122,27,4,0,0,22,0,0,0,-1--1--1,,1|(683,281)|
+1,121,122,119,100,0,0,22,0,0,0,-1--1--1,,1|(683,235)|
+11,122,48,683,252,8,6,33,3,0,0,4,0,0,0
+10,123,"Feature Disruption (DF)",742,252,51,19,40,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|12||255-0-0
+12,124,3672576,776,906,291,255,3,188,0,0,1,0,0,0
+Resource_Growth_rate
+10,125,CS Fraction,286,837,46,11,8,3,0,0,0,0,0,0
+10,126,"Compromised Systems (CS)",348,765,50,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,127,"Uncompromised Systems (US)",324,920,58,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,128,127,125,1,0,0,0,0,64,0,-1--1--1,,1|(325,874)|
+1,129,126,125,1,0,0,0,0,64,0,-1--1--1,,1|(327,803)|
+12,130,2755340,2472,97,241,218,3,188,0,0,2,0,0,0
+"Compromised Systems (CS)",Graph
+12,131,3869394,2471,557,241,206,3,188,0,0,2,0,0,0
+"Unknown Vulnerable Features (UVF)",Graph
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Calculations
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,100,0
+10,1,"Attackers (A)",169,173,37,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,2,"Solution Developers (D)",212,265,42,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,3,"Ratio Hackers / Solution Developers",368,201,65,19,8,3,0,0,0,0,0,0
+1,4,1,3,1,0,0,0,0,64,0,-1--1--1,,1|(216,192)|
+1,5,2,3,1,0,0,0,0,64,0,-1--1--1,,1|(292,257)|
+///---\\\
+:GRAPH Systems
+:TITLE Systems
+:X-AXIS Time
+:SCALE
+:VAR "Compromised Systems (CS)"
+:VAR "Uncompromised Systems (US)"
+
+:GRAPH Features
+:TITLE System Features
+:X-AXIS Time
+:SCALE
+:VAR "Unknown Vulnerable Features (UVF)"
+:VAR "Known Vulnerable Features (KVF)"
+:SCALE
+:VAR "Safe Features (SF)"
+
+:GRAPH Programmers
+:TITLE Programmers
+:X-AXIS Time
+:SCALE
+:VAR "Hackers (H)"
+:VAR "Solution Developers (D)"
+
+:GRAPH Resource_Growth_rate
+:TITLE Resource Growth rate
+:X-AXIS Time
+:SCALE
+:VAR "Hacker growth rate (HGR)"
+:VAR "Solution Developer growth Rate (DGR)"
+:L<%^E!@
+1:Current-DCS-SAT-MIN.vdf
+1:Current-DCS-SAT-MAX.vdf
+1:Current-DCS-base.vdf
+9:Current-DCS-HE-MAX
+23:0
+15:0,0,0,1,0,0
+19:100,0
+27:0,
+34:0,
+4:Time
+5:Attacker effectiveness (AE)
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:4
+41:0
+42:0
+24:0
+25:1000
+26:1000
