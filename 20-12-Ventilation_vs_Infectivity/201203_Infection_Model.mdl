@@ -1,0 +1,258 @@
+{UTF-8}
+Air Density=
+	1225
+	~	g/m3
+	~	https://en.wikipedia.org/wiki/Density_of_air
+	|
+
+Breathing=
+	0.0024*Infected
+	~	g/Day
+	~		|
+
+Room Volume=
+	5*5*4
+	~	m3
+	~	Room with a volume of 5 x 5 x 4 meters
+	|
+
+Clean Particles= INTEG (
+	Clean particle recovery due to vent and Virus Decay+Exhalation of Clean Particles-Breathing\
+		,
+		Air Density*Room Volume)
+	~	g
+	~		|
+
+Virus particles= INTEG (
+	Virus Production-Virus Decay-Virus loss due to Ventilation,
+		0)
+	~	g
+	~		|
+
+Ventilation strength=
+	0
+	~	g/Day [0,2000,1]
+	~		|
+
+Exhalation of Clean Particles=
+	Breathing-Virus Production
+	~	g/Day
+	~		|
+
+Virus Decay Time=
+	14
+	~	Day
+	~		|
+
+Virus loss due to Ventilation=
+	Overall Virus Concentration*Ventilation strength
+	~	g/Day
+	~		|
+
+Person Viral Productivity=
+	0.4
+	~	g/Person
+	~		|
+
+Overall Virus Concentration=
+	Virus particles/Clean Particles
+	~	Dmnl
+	~		|
+
+Virus Decay=
+	Virus particles/Virus Decay Time
+	~	g/Day
+	~		|
+
+Virus Production=
+	Infected*Person Viral Productivity
+	~	g/Day
+	~		|
+
+Clean particle recovery due to vent and Virus Decay=
+	Virus Decay+Virus loss due to Ventilation
+	~	
+	~		|
+
+Contact Frequency=
+	2
+	~	1/Day
+	~		|
+
+Contacts between suceptible and Virus Particle=
+	Suceptible Contacts*Probability of contact with Virus Particle
+	~	
+	~		|
+
+Infected= INTEG (
+	Infection Rate,
+		1)
+	~	Person
+	~		|
+
+Infection Rate=
+	Contacts between suceptible and Virus Particle*infectivity
+	~	Person/Day
+	~		|
+
+infectivity=
+	0.05
+	~	Dmnl
+	~		|
+
+Probability of contact with Virus Particle=
+	Virus particles/Clean Particles
+	~	Dmnl
+	~		|
+
+Suceptible Contacts=
+	Susceptible*Contact Frequency
+	~	Person/Day
+	~		|
+
+Susceptible= INTEG (
+	-Infection Rate,
+		10)
+	~	Person
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 250
+	~	Day
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Day
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP 
+	~	Day [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.0078125
+	~	Day [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,100,0
+10,1,Susceptible,208,168,40,20,3,3,0,0,0,0,0,0
+10,2,Infected,448,170,40,20,3,3,0,0,0,0,0,0
+1,3,5,2,4,0,0,22,0,0,0,-1--1--1,,1|(371,169)|
+1,4,5,1,100,0,0,22,0,0,0,-1--1--1,,1|(285,169)|
+11,5,156,328,169,6,8,34,3,0,0,1,0,0,0
+10,6,Infection Rate,328,188,44,11,40,3,0,0,-1,0,0,0
+10,7,infectivity,272,88,30,11,8,3,0,0,0,0,0,0
+1,8,7,6,1,0,0,0,0,64,0,-1--1--1,,1|(312,119)|
+10,9,Suceptible Contacts,182,266,34,19,8,3,0,0,0,0,0,0
+10,10,Contact Frequency,130,356,34,19,8,3,0,0,0,0,0,0
+10,11,Contacts between suceptible and Virus Particle,304,381,65,28,8,3,0,0,0,0,0,0
+10,12,Probability of contact with Virus Particle,424,465,51,28,8,131,0,0,0,0,0,0
+1,13,10,9,1,0,0,0,0,64,0,-1--1--1,,1|(149,302)|
+1,14,1,9,1,0,0,0,0,64,0,-1--1--1,,1|(183,226)|
+1,15,9,11,1,0,0,0,0,64,0,-1--1--1,,1|(202,323)|
+1,16,12,11,1,0,0,0,0,64,0,-1--1--1,,1|(363,445)|
+1,17,11,6,1,0,0,0,0,64,0,-1--1--1,,1|(350,298)|
+12,18,7080352,1318,163,252,132,3,188,0,0,1,0,0,0
+Stocks
+12,19,3542008,1316,432,252,130,3,188,0,0,2,0,0,0
+Infection Rate,Graph
+10,20,Virus particles,725,295,40,20,3,3,0,0,0,0,0,0
+12,21,48,588,294,10,8,0,3,0,0,-1,0,0,0
+1,22,24,20,4,0,0,22,0,0,0,-1--1--1,,1|(664,294)|
+1,23,24,21,100,0,0,22,0,0,0,-1--1--1,,1|(615,294)|
+11,24,48,638,294,6,8,34,3,0,0,1,0,0,0
+10,25,Virus Production,638,321,38,19,40,131,0,0,-1,0,0,0
+12,26,48,857,294,10,8,0,3,0,0,-1,0,0,0
+1,27,29,26,4,0,0,22,0,0,0,-1--1--1,,1|(829,294)|
+1,28,29,20,100,0,0,22,0,0,0,-1--1--1,,1|(782,294)|
+11,29,48,806,294,6,8,34,3,0,0,1,0,0,0
+10,30,Virus Decay,806,322,28,20,40,131,0,0,-1,0,0,0
+12,31,48,724,158,10,8,0,3,0,0,-1,0,0,0
+1,32,34,31,4,0,0,22,0,0,0,-1--1--1,,1|(724,190)|
+1,33,34,20,100,0,0,22,0,0,0,-1--1--1,,1|(724,250)|
+11,34,48,724,220,8,6,33,3,0,0,4,0,0,0
+10,35,Virus loss due to Ventilation,786,220,54,19,40,3,0,0,-1,0,0,0
+10,36,Clean Particles,728,517,40,20,3,3,0,0,0,0,0,0
+12,37,48,727,420,10,8,0,3,0,0,-1,0,0,0
+1,38,40,37,4,0,0,22,0,0,0,-1--1--1,,1|(727,442)|
+1,39,40,36,100,0,0,22,0,0,0,-1--1--1,,1|(727,482)|
+11,40,48,727,462,8,6,33,3,0,0,4,0,0,0
+10,41,Breathing,766,462,31,17,40,131,0,0,-1,0,0,0
+12,42,48,859,512,10,8,0,3,0,0,-1,0,0,0
+1,43,45,36,4,0,0,22,0,0,0,-1--1--1,,1|(792,509)|
+1,44,45,42,100,0,0,22,0,0,0,-1--1--1,,1|(839,509)|
+11,45,48,823,509,6,8,34,3,0,0,1,0,0,0
+10,46,Clean particle recovery due to vent and Virus Decay,823,546,52,29,40,131,0,0,-1,0,0,0
+12,47,48,616,518,10,8,0,3,0,0,-1,0,0,0
+1,48,50,36,4,0,0,22,0,0,0,-1--1--1,,1|(675,518)|
+1,49,50,47,100,0,0,22,0,0,0,-1--1--1,,1|(638,518)|
+11,50,48,657,518,6,8,34,3,0,0,1,0,0,0
+10,51,Exhalation of Clean Particles,657,554,40,28,40,131,0,0,-1,0,0,0
+1,52,20,12,1,0,0,0,0,64,0,-1--1--1,,1|(635,405)|
+1,53,36,12,1,0,0,0,0,64,0,-1--1--1,,1|(608,490)|
+1,54,2,25,1,0,0,0,0,64,0,-1--1--1,,1|(608,234)|
+1,56,2,41,1,0,0,0,0,64,0,-1--1--1,,1|(515,290)|
+1,57,30,46,1,0,0,0,0,64,0,-1--1--1,,1|(882,423)|
+1,58,35,46,1,0,0,0,0,64,0,-1--1--1,,1|(902,295)|
+10,60,Person Viral Productivity,617,121,40,19,8,3,0,0,0,0,0,0
+1,61,60,25,1,0,0,0,0,64,0,-1--1--1,,1|(660,217)|
+1,62,20,30,1,0,0,0,0,64,0,-1--1--1,,1|(757,342)|
+10,63,Virus Decay Time,777,389,30,24,8,131,0,0,0,0,0,0
+1,64,63,30,1,0,0,0,0,64,0,-1--1--1,,1|(817,366)|
+1,65,25,51,1,0,0,0,0,64,0,-1--1--1,,1|(609,404)|
+1,66,41,51,1,0,0,0,0,64,0,-1--1--1,,1|(674,468)|
+10,67,Clean Particles,75,621,44,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|0||128-128-128
+10,70,Ventilation strength,913,166,41,21,8,131,0,0,0,0,0,0
+10,72,Overall Virus Concentration,820,77,47,23,8,131,0,0,0,0,0,0
+10,73,Clean Particles,926,46,43,17,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|0||128-128-128
+10,74,Virus particles,918,106,43,18,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|0||128-128-128
+1,75,73,72,1,0,0,0,0,64,0,-1--1--1,,1|(888,34)|
+1,76,74,72,1,0,0,0,0,64,0,-1--1--1,,1|(863,117)|
+12,77,4787598,1315,691,252,123,3,188,0,0,2,0,0,0
+Overall Virus Concentration,Graph
+1,78,72,35,1,0,0,0,0,64,0,-1--1--1,,1|(775,135)|
+1,79,70,35,1,0,0,0,0,64,0,-1--1--1,,1|(842,165)|
+10,80,Air Density,704,612,27,18,8,131,0,0,0,0,0,0
+10,81,Room Volume,766,612,37,19,8,131,0,0,0,0,0,0
+1,82,80,36,1,0,0,0,0,64,1,-1--1--1,,1|(719,578)|
+1,83,81,36,1,0,0,0,0,64,1,-1--1--1,,1|(761,569)|
+///---\\\
+:GRAPH Stocks
+:TITLE Stocks
+:X-AXIS Time
+:SCALE
+:VAR Susceptible
+:VAR Infected
+:L<%^E!@
+1:Current.vdf
+9:Current
+23:0
+15:0,0,0,0,0,0
+19:100,0
+27:0,
+34:0,
+4:Time
+5:Infection Rate
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:4
+41:0
+42:1
+24:0
+25:250
+26:250
