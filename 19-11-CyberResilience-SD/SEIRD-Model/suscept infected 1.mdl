@@ -1,0 +1,103 @@
+{UTF-8}
+Initial Infected=
+	1
+	~	person [0,20]
+	~		|
+
+Infected= INTEG (
+	Infecting,
+		Initial Infected)
+	~	people
+	~		|
+
+Infecting=
+	Infected*growth rate*(Susceptible/Population)
+	~	people/Day
+	~		|
+
+Population=
+	1e+06
+	~	people
+	~		|
+
+Susceptible= INTEG (
+	-Infecting,
+		Population-Initial Infected)
+	~	people
+	~		|
+
+growth rate=
+	0.14
+	~	fraction/Day
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Day
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Day
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Day [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.25
+	~	Day [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,235,0
+10,1,Infected,347,148,32,16,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,2,growth rate,225,242,42,16,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,3,0,564,167,150,150,3,15,0,0,2,0,0,0,0,0,0,0,0,0
+Infected,Graph
+10,4,Susceptible,108,145,43,16,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,5,7,4,100,0,45,22,2,128,0,-1--1--1,|0||-1--1--1,1|(186,146)|
+1,6,7,1,4,0,43,22,2,192,0,-1--1--1,|0||-1--1--1,1|(274,146)|
+11,7,0,227,146,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,8,Infecting,227,170,35,16,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,9,2,8,0,0,0,0,0,192,0,-1--1--1,,1|(225,212)|
+1,10,1,8,1,0,43,0,2,192,0,-1--1--1,|0||-1--1--1,1|(301,191)|
+10,11,Initial Infected,340,72,53,16,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,12,11,1,0,0,0,0,0,192,1,-1--1--1,,1|(342,103)|
+10,13,Population,106,76,40,16,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,14,13,4,0,0,0,0,0,192,1,-1--1--1,,1|(106,103)|
+1,15,11,4,1,0,0,0,0,192,1,-1--1--1,,1|(217,92)|
+1,16,4,8,1,0,43,0,2,192,0,-1--1--1,|0||-1--1--1,1|(143,188)|
+1,17,13,7,1,0,0,0,0,192,0,-1--1--1,,1|(188,103)|
+///---\\\
+:L<%^E!@
+9:Inf Susc - Higher Growth
+23:0
+15:0,0,0,0,0,0
+19:235,0
+27:0,
+34:0,
+4:Time
+5:Infecting
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:4
+41:0
+42:1
+24:0
+25:100
+26:100
