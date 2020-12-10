@@ -1,8 +1,11 @@
 # Vensim-Experiments
 
-This repository relates to the development of models for Public Health
+This repository relates to the development of models related to Public Health or the application of its principles.
 
-1.- Influence of Ventilation on Indoors Viral Infectivity
+**1.- Epidemiological approach to high-level Cyber-Resilience**
+
+**2.- Ventilation_vs_Infectivity**
+Influence of Ventilation on Indoors Viral Infectivity
 
 This System Dynamcis model is based on a SIR Model, integrating the influence of Ventilation into the mechanics that lead to an infection. 
 
