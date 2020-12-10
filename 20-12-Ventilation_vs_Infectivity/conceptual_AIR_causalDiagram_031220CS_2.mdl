@@ -1,0 +1,179 @@
+{UTF-8}
+import time=
+	1
+	~	Day
+	~	The time (i.e. day) at which the tourists return to Denmark.
+	|
+
+Exposed= INTEG (
+	infected tourists returning from Austria + infecting,
+		0)
+	~	People
+	~		|
+
+n infected tourists=
+	139
+	~	People
+	~	Infected tourists returning from Ischgl, Austria
+	|
+
+infected tourists returning from Austria=
+	n infected tourists * PULSE(import time, TIME STEP)/TIME STEP
+	~	People/Day
+	~		|
+
+Active infected=
+	Exposed
+	~	People
+	~		|
+
+infecting=
+	Active infected * particle density
+	~	People/Day
+	~		|
+
+height from floor to ceiling=
+	4
+	~	m
+	~	Approximate height in an average household (measured from floor to ceiling)
+	|
+
+m3 in household=
+	m2 in household*height from floor to ceiling
+	~	m*m*m
+	~		|
+
+m2 in household=
+	50
+	~	m*m
+	~	Approximate number of square meters in an average household
+	|
+
+particle density=
+	(volume exhaled per person * (number of people in household / m3 in household) * (m3 in household\
+		 / (volume exhaled per person
+	 * number of people in household)) * Percent vented household) / Time
+	~	fraction/Day
+	~		|
+
+Susceptible= INTEG (
+	-infecting,
+		1000)
+	~	People
+	~		|
+
+number of people in household=
+	5
+	~	People
+	~		|
+
+Percent vented household=
+	0.25
+	~	dmnl
+	~		|
+
+volume exhaled per person=
+	4680
+	~	parts/People
+	~	Volume exhaled per person per day. Estimated as minute vol (equivalent to \
+		5-8 l/min during normal breathing) * 60 * 12
+	|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 365
+	~	Day
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Day
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP 
+	~	Day [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.0078125
+	~	Day [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,100,0
+10,1,Percent vented household,571,214,59,19,8,3,0,0,0,0,0,0
+10,2,volume exhaled per person,256,358,49,19,8,3,0,0,0,0,0,0
+10,3,number of people in household,243,252,65,19,8,131,0,0,0,0,0,0
+10,4,particle density,436,347,48,11,8,3,0,0,0,0,0,0
+1,5,3,4,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(342,285)|
+1,6,2,4,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(329,335)|
+10,7,m3 in household,412,237,44,19,8,3,0,0,0,0,0,0
+1,8,7,4,1,0,45,0,2,128,0,-1--1--1,|12||0-0-0,1|(432,289)|
+10,9,Susceptible,337,444,65,29,3,131,0,0,0,0,0,0
+10,10,Exposed,700,445,76,29,3,131,0,0,0,0,0,0
+1,11,13,10,4,0,0,22,0,0,0,-1--1--1,,1|(571,444)|
+1,12,13,9,100,0,0,22,0,0,0,-1--1--1,,1|(454,444)|
+11,13,172,513,444,6,8,34,3,0,0,1,0,0,0
+10,14,infecting,513,463,38,11,40,131,0,0,-1,0,0,0
+10,15,Active infected,612,575,47,11,8,3,0,0,0,0,0,0
+1,16,10,15,1,0,43,0,3,128,0,255-0-0,|12||255-0-0,1|(704,528)|
+1,17,15,14,1,0,43,0,3,128,0,255-0-0,|12||255-0-0,1|(531,533)|
+12,18,0,612,517,38,38,4,135,0,3,-1,0,0,0,255-0-0,0-0-0,|12||255-0-0
+Contagion
+1,19,1,4,1,0,45,0,2,128,0,-1--1--1,|12||0-0-0,1|(530,295)|
+1,20,4,13,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(452,400)|
+10,21,Time,614,361,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,22,21,4,1,0,0,0,0,128,0,-1--1--1,,1|(543,369)|
+10,23,m2 in household,344,137,51,11,8,3,0,0,0,0,0,0
+10,24,height from floor to ceiling,498,128,53,19,8,3,0,0,0,0,0,0
+1,25,23,7,1,0,0,0,0,128,0,-1--1--1,,1|(361,187)|
+1,26,24,7,1,0,0,0,0,128,0,-1--1--1,,1|(473,182)|
+12,27,1247772,1111,203,150,150,3,44,0,0,2,0,0,0
+particle density,Graph
+12,28,1379098,1110,504,150,150,3,44,0,0,2,0,0,0
+Susceptible,Graph
+12,29,1247770,1412,505,150,150,3,44,0,0,2,0,0,0
+Exposed,Graph
+12,30,48,730,337,10,8,0,3,0,0,-1,0,0,0
+1,31,33,10,4,0,0,22,0,0,0,-1--1--1,,1|(730,401)|
+1,32,33,30,100,0,0,22,0,0,0,-1--1--1,,1|(730,359)|
+11,33,48,730,380,8,6,33,3,0,0,4,0,0,0
+10,34,infected tourists returning from Austria,807,380,69,19,40,3,0,0,-1,0,0,0
+10,35,n infected tourists,845,307,55,11,8,3,0,0,0,0,0,0
+1,36,35,34,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(837,336)|
+10,37,import time,851,472,36,11,8,3,0,0,0,0,0,0
+1,38,37,34,1,0,0,0,0,128,0,-1--1--1,,1|(821,440)|
+10,39,TIME STEP,764,229,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,40,39,34,1,0,0,0,0,128,0,-1--1--1,,1|(750,293)|
+///---\\\
+:L<%^E!@
+1:Current.vdf
+1:C:\Users\dasep\AppData\Local\Microsoft\Windows\INetCache\Content.Outlook\JDJMRA15\Current.vdf
+9:Current
+23:0
+15:0,0,0,0,0,0
+19:100,0
+27:2,
+34:0,
+4:Time
+5:infecting
+35:Date
+36:YYYY-MM-DD
+37:2021
+38:1
+39:1
+40:4
+41:0
+42:1
+24:0
+25:100
+26:100
