@@ -1,14 +1,48 @@
 {UTF-8}
+Room length=
+	5
+	~	m
+	~		|
+
 Breathing=
 	Minute Volume*Infected*Air Density
 	~	g/Day
 	~		|
 
+Room Heigth=
+	2.5
+	~	m
+	~		|
+
+Room Volume=
+	Room width*Room length*Room Heigth
+	~	m3
+	~		|
+
+Room width=
+	5
+	~	m
+	~		|
+
 Minute Volume=
-	10,8
+	10.08
 	~	m3/(Person*Day)
 	~	7 [l/min*Person] * 24*60 [min/Day] /1000 [l/m3]
 		Breathing is 6-8 [l/min*Person]
+	|
+
+Ventilation strength  = A FUNCTION OF( Room length,Room width) ~~|
+Ventilation strength=
+	793800
+	~	g/Day [0,2000,1]
+	~	1.08[m3/(h*m2)] * 25[m2] * 24[h/Day] * 1225 [g/m3]
+		
+		The Danish Building Regulation law BR18's requirement is the addition of a \
+		basic air change of 0.3 litres of air per second per square metre of \
+		heated floor space (overall dimensions). For a home with a ceiling height \
+		of 2.5 m, this is the equivalent of the air in the room being changed once \
+		every two hours. Converted to m3 of air, 1.08 m3 an hour per square metre \
+		is required.
 	|
 
 recovery rate=
@@ -39,12 +73,6 @@ Air Density=
 	~	https://en.wikipedia.org/wiki/Density_of_air
 	|
 
-Room Volume=
-	5*5*4
-	~	m3
-	~	Room with a volume of 5 x 5 x 4 meters
-	|
-
 Clean Particles= INTEG (
 	Clean particle recovery due to vent and Virus Decay+Exhalation of Clean Particles-Breathing\
 		,
@@ -56,11 +84,6 @@ Virus particles= INTEG (
 	Virus Production-Virus Decay-Virus loss due to Ventilation,
 		0)
 	~	g
-	~		|
-
-Ventilation strength=
-	2000
-	~	g/Day [0,2000,1]
 	~		|
 
 Exhalation of Clean Particles=
@@ -79,7 +102,7 @@ Virus loss due to Ventilation=
 	~		|
 
 Person Viral Productivity=
-	0.4
+	20
 	~	g/(Person*Day)
 	~		|
 
@@ -104,7 +127,7 @@ Clean particle recovery due to vent and Virus Decay=
 	~		|
 
 Contact Frequency=
-	10000
+	50000
 	~	1/Day
 	~		|
 
@@ -119,7 +142,7 @@ Infection Rate=
 	~		|
 
 infectivity=
-	0.05
+	0.08
 	~	Dmnl
 	~		|
 
@@ -139,7 +162,7 @@ Suceptible Contacts=
 		Simulation Control Parameters
 	|
 
-FINAL TIME  = 250
+FINAL TIME  = 10
 	~	Day
 	~	The final time for the simulation.
 	|
@@ -150,7 +173,7 @@ INITIAL TIME  = 0
 	|
 
 SAVEPER  = 
-        TIME STEP
+        TIME STEP 
 	~	Day [0,?]
 	~	The frequency with which output is stored.
 	|
@@ -181,9 +204,9 @@ $192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,1
 1,15,9,11,1,0,0,0,0,64,0,-1--1--1,,1|(181,364)|
 1,16,12,11,1,0,0,0,0,64,0,-1--1--1,,1|(363,479)|
 1,17,11,6,1,0,0,0,0,64,0,-1--1--1,,1|(403,356)|
-12,18,0,1318,197,252,132,3,188,0,0,1,0,0,0
+12,18,0,1360,187,252,132,3,188,0,0,1,0,0,0
 Stocks
-12,19,0,1316,466,252,130,3,188,0,0,2,0,0,0
+12,19,0,1359,458,252,130,3,188,0,0,2,0,0,0
 Infection Rate,Graph
 10,20,Virus particles,725,329,40,20,3,3,0,0,0,0,0,0
 12,21,48,588,328,10,8,0,3,0,0,-1,0,0,0
@@ -237,7 +260,7 @@ Infection Rate,Graph
 10,69,Virus particles,918,140,43,18,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
 1,70,68,67,1,0,0,0,0,64,0,-1--1--1,,1|(888,68)|
 1,71,69,67,1,0,0,0,0,64,0,-1--1--1,,1|(863,151)|
-12,72,0,1315,725,252,123,3,188,0,0,2,0,0,0
+12,72,0,1357,714,252,123,3,188,0,0,2,0,0,0
 Overall Virus Concentration,Graph
 1,73,67,35,1,0,0,0,0,64,0,-1--1--1,,1|(775,169)|
 1,74,66,35,1,0,0,0,0,64,0,-1--1--1,,1|(842,199)|
@@ -255,6 +278,16 @@ Overall Virus Concentration,Graph
 10,86,Minute Volume,765,497,38,19,8,131,0,0,0,0,0,0
 1,87,86,41,1,0,0,0,0,64,0,-1--1--1,,1|(743,528)|
 1,88,75,41,1,0,0,0,0,64,0,-1--1--1,,1|(799,549)|
+10,89,Room Heigth,674,773,33,20,8,131,0,0,0,0,0,0
+10,90,Room width,778,779,31,19,8,131,0,0,0,0,0,0
+10,91,Room length,850,744,32,17,8,131,0,0,0,0,0,0
+1,92,89,76,1,0,0,0,0,64,0,-1--1--1,,1|(689,742)|
+1,93,90,76,1,0,0,0,0,64,0,-1--1--1,,1|(768,741)|
+1,94,91,76,1,0,0,0,0,64,0,-1--1--1,,1|(825,718)|
+10,95,Room width,1037,203,48,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|0||128-128-128
+10,96,Room length,1035,250,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|0||128-128-128
+1,97,95,66,1,0,0,0,0,64,0,-1--1--1,,1|(976,190)|
+1,98,96,66,1,0,0,0,0,64,0,-1--1--1,,1|(963,246)|
 ///---\\\
 :GRAPH Stocks
 :TITLE Stocks
@@ -271,7 +304,7 @@ Overall Virus Concentration,Graph
 27:0,
 34:0,
 4:Time
-5:Person Viral Productivity
+5:Ventilation strength
 35:Date
 36:YYYY-MM-DD
 37:2000
@@ -281,5 +314,5 @@ Overall Virus Concentration,Graph
 41:0
 42:1
 24:0
-25:250
-26:250
+25:10
+26:10
