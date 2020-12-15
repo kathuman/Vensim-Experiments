@@ -305,8 +305,8 @@ Overall Virus Concentration,Graph
 :VAR Susceptible
 :VAR Infected
 :L<%^E!@
-1:Current.vdf
-9:Current
+1:Current1.vdf
+9:Current1
 23:0
 15:0,0,0,0,0,0
 19:100,0
