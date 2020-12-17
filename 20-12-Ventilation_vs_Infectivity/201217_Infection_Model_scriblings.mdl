@@ -1,0 +1,354 @@
+{UTF-8}
+"Wells-Riley"  = A FUNCTION OF( Asymp ill,exposure time,Person Viral Productivity,pulmonary vent rate\
+		,Symp ill,-Ventilation strength) ~~|
+"Wells-Riley"=
+	1 - exp( - ((Asymp ill+Symp ill)*pulmonary vent rate*exposure time*vira concentration\
+		)/Ventilation strength)
+	~	
+	~		|
+
+infection=
+	Contacts between suceptible and Virus Particle*"Wells-Riley"
+	~	Person/Day
+	~		|
+
+pulmonary vent rate  = A FUNCTION OF( )
+	~	
+	~		|
+
+exposure time  = A FUNCTION OF( )
+	~	
+	~		|
+
+death=
+	(Symp ill*mortality fraction) / sickness period
+	~	Person/Day
+	~		|
+
+Virus Production=
+	(Asymp ill + Symp ill) * Person Viral Productivity
+	~	g/Day
+	~		|
+
+Asymp ill= INTEG (
+	infection-illness,
+		1)
+	~	Person
+	~		|
+
+Symp ill= INTEG (
+	illness-death-sickness,
+		0)
+	~	Person
+	~		|
+
+Recovered= INTEG (
+	sickness,
+		0)
+	~	Person
+	~		|
+
+incubation time=
+	5
+	~	Day
+	~	Time from having caught an infection until symptoms appear
+	|
+
+sickness=
+	Symp ill / sickness period
+	~	Person/Day
+	~		|
+
+sickness period=
+	14
+	~	Day
+	~	The number of days being sick with symptoms before either death or recovery
+	|
+
+Dead= INTEG (
+	death,
+		0)
+	~	Person
+	~		|
+
+Susceptible= INTEG (
+	-infection,
+		10)
+	~	Person
+	~		|
+
+illness=
+	Asymp ill / incubation time
+	~	Person/Day
+	~		|
+
+mortality fraction=
+	0.05
+	~	fraction
+	~		|
+
+Air Density=
+	1225
+	~	g/m3
+	~	https://en.wikipedia.org/wiki/Density_of_air
+	|
+
+Breathing=
+	0.0024*Asymp ill
+	~	g/Day
+	~		|
+
+Room Volume=
+	5*5*4
+	~	m3
+	~	Room with a volume of 5 x 5 x 4 meters
+	|
+
+Clean Particles= INTEG (
+	Clean particle recovery due to vent and Virus Decay+Exhalation of Clean Particles-Breathing\
+		,
+		Air Density*Room Volume)
+	~	g
+	~		|
+
+Virus particles= INTEG (
+	Virus Production-Virus Decay-Virus loss due to Ventilation,
+		0)
+	~	g
+	~		|
+
+Ventilation strength=
+	2000
+	~	g/Day [0,2000,1]
+	~		|
+
+Exhalation of Clean Particles=
+	Breathing-Virus Production
+	~	g/Day
+	~		|
+
+Virus Decay Time=
+	14
+	~	Day
+	~		|
+
+Virus loss due to Ventilation=
+	Overall Virus Concentration*Ventilation strength
+	~	g/Day
+	~		|
+
+Person Viral Productivity=
+	0.4
+	~	g/Person/Day
+	~		|
+
+Overall Virus Concentration=
+	Virus particles/Clean Particles
+	~	Dmnl
+	~		|
+
+Virus Decay=
+	Virus particles/Virus Decay Time
+	~	g/Day
+	~		|
+
+Clean particle recovery due to vent and Virus Decay=
+	Virus Decay+Virus loss due to Ventilation
+	~	g/Day
+	~		|
+
+Contact Frequency=
+	10000
+	~	1/Day
+	~		|
+
+Contacts between suceptible and Virus Particle=
+	Suceptible Contacts*Probability of contact with Virus Particle
+	~	Person/Day
+	~		|
+
+Probability of contact with Virus Particle=
+	Virus particles/Clean Particles
+	~	Dmnl
+	~		|
+
+Suceptible Contacts=
+	Susceptible*Contact Frequency
+	~	Person/Day
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 250
+	~	Day
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Day
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Day [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.0078125
+	~	Day [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,100,0
+10,1,Susceptible,319,298,40,20,3,3,0,0,0,0,0,0
+10,2,Asymp ill,567,293,40,20,3,3,0,0,0,0,0,0
+1,3,5,2,4,0,0,22,0,0,0,-1--1--1,,1|(486,291)|
+1,4,5,1,100,0,0,22,0,0,0,-1--1--1,,1|(396,291)|
+11,5,252,439,291,6,8,34,3,0,0,1,0,0,0
+10,6,infection,439,310,44,11,40,3,0,0,-1,0,0,0
+10,7,Suceptible Contacts,301,421,34,19,8,3,0,0,0,0,0,0
+10,8,Contact Frequency,266,509,34,19,8,3,0,0,0,0,0,0
+10,9,Contacts between suceptible and Virus Particle,438,502,65,28,8,3,0,0,0,0,0,0
+10,10,Probability of contact with Virus Particle,560,618,51,28,8,131,0,0,0,0,0,0
+1,11,8,7,1,0,0,0,0,64,0,-1--1--1,,1|(276,458)|
+1,12,1,7,1,0,0,0,0,64,0,-1--1--1,,1|(293,372)|
+1,13,7,9,1,0,0,0,0,64,0,-1--1--1,,1|(332,468)|
+1,14,10,9,1,0,0,0,0,64,0,-1--1--1,,1|(492,587)|
+1,15,9,6,1,0,0,0,0,64,0,-1--1--1,,1|(401,397)|
+12,16,0,1454,316,252,132,3,188,0,0,1,0,0,0
+Stocks
+12,17,0,1452,585,252,130,3,188,0,0,2,0,0,0
+infection,Graph
+10,18,Virus particles,861,448,40,20,3,3,0,0,0,0,0,0
+12,19,48,724,447,10,8,0,3,0,0,-1,0,0,0
+1,20,22,18,4,0,0,22,0,0,0,-1--1--1,,1|(800,447)|
+1,21,22,19,100,0,0,22,0,0,0,-1--1--1,,1|(751,447)|
+11,22,48,774,447,6,8,34,3,0,0,1,0,0,0
+10,23,Virus Production,774,474,38,19,40,131,0,0,-1,0,0,0
+12,24,48,993,447,10,8,0,3,0,0,-1,0,0,0
+1,25,27,24,4,0,0,22,0,0,0,-1--1--1,,1|(965,447)|
+1,26,27,18,100,0,0,22,0,0,0,-1--1--1,,1|(918,447)|
+11,27,48,942,447,6,8,34,3,0,0,1,0,0,0
+10,28,Virus Decay,942,475,28,20,40,131,0,0,-1,0,0,0
+12,29,48,860,311,10,8,0,3,0,0,-1,0,0,0
+1,30,32,29,4,0,0,22,0,0,0,-1--1--1,,1|(860,343)|
+1,31,32,18,100,0,0,22,0,0,0,-1--1--1,,1|(860,403)|
+11,32,48,860,373,8,6,33,3,0,0,4,0,0,0
+10,33,Virus loss due to Ventilation,922,373,54,19,40,3,0,0,-1,0,0,0
+10,34,Clean Particles,864,670,40,20,3,3,0,0,0,0,0,0
+12,35,48,863,573,10,8,0,3,0,0,-1,0,0,0
+1,36,38,35,4,0,0,22,0,0,0,-1--1--1,,1|(863,595)|
+1,37,38,34,100,0,0,22,0,0,0,-1--1--1,,1|(863,635)|
+11,38,48,863,615,8,6,33,3,0,0,4,0,0,0
+10,39,Breathing,902,615,31,17,40,131,0,0,-1,0,0,0
+12,40,48,995,665,10,8,0,3,0,0,-1,0,0,0
+1,41,43,34,4,0,0,22,0,0,0,-1--1--1,,1|(928,662)|
+1,42,43,40,100,0,0,22,0,0,0,-1--1--1,,1|(975,662)|
+11,43,48,959,662,6,8,34,3,0,0,1,0,0,0
+10,44,Clean particle recovery due to vent and Virus Decay,959,699,52,29,40,131,0,0,-1,0,0,0
+12,45,48,752,671,10,8,0,3,0,0,-1,0,0,0
+1,46,48,34,4,0,0,22,0,0,0,-1--1--1,,1|(811,671)|
+1,47,48,45,100,0,0,22,0,0,0,-1--1--1,,1|(774,671)|
+11,48,48,793,671,6,8,34,3,0,0,1,0,0,0
+10,49,Exhalation of Clean Particles,793,707,40,28,40,131,0,0,-1,0,0,0
+1,50,18,10,1,0,0,0,0,64,0,-1--1--1,,1|(771,558)|
+1,51,34,10,1,0,0,0,0,64,0,-1--1--1,,1|(744,643)|
+1,52,2,23,1,0,0,0,0,64,0,-1--1--1,,1|(748,369)|
+1,53,2,39,1,0,0,0,0,64,0,-1--1--1,,1|(602,441)|
+1,54,28,44,1,0,0,0,0,64,0,-1--1--1,,1|(1018,576)|
+1,55,33,44,1,0,0,0,0,64,0,-1--1--1,,1|(1038,448)|
+10,56,Person Viral Productivity,657,419,40,19,8,3,0,0,0,0,0,0
+1,57,56,23,1,0,0,0,0,64,0,-1--1--1,,1|(708,471)|
+1,58,18,28,1,0,0,0,0,64,0,-1--1--1,,1|(893,495)|
+10,59,Virus Decay Time,913,542,30,24,8,131,0,0,0,0,0,0
+1,60,59,28,1,0,0,0,0,64,0,-1--1--1,,1|(953,519)|
+1,61,23,49,1,0,0,0,0,64,0,-1--1--1,,1|(745,557)|
+1,62,39,49,1,0,0,0,0,64,0,-1--1--1,,1|(802,618)|
+10,63,Clean Particles,211,774,44,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,64,Ventilation strength,1049,319,41,21,8,131,0,0,0,0,0,0
+10,65,Overall Virus Concentration,956,230,47,23,8,131,0,0,0,0,0,0
+10,66,Clean Particles,1062,199,43,17,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,67,Virus particles,1054,259,43,18,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,68,66,65,1,0,0,0,0,64,0,-1--1--1,,1|(1024,187)|
+1,69,67,65,1,0,0,0,0,64,0,-1--1--1,,1|(999,270)|
+12,70,0,1451,844,252,123,3,188,0,0,2,0,0,0
+Overall Virus Concentration,Graph
+1,71,65,33,1,0,0,0,0,64,0,-1--1--1,,1|(911,288)|
+1,72,64,33,1,0,0,0,0,64,0,-1--1--1,,1|(978,318)|
+10,73,Air Density,840,765,27,18,8,131,0,0,0,0,0,0
+10,74,Room Volume,902,765,37,19,8,131,0,0,0,0,0,0
+1,75,73,34,1,0,0,0,0,64,1,-1--1--1,,1|(855,731)|
+1,76,74,34,1,0,0,0,0,64,1,-1--1--1,,1|(897,722)|
+10,77,Symp ill,567,151,40,20,3,3,0,0,0,0,0,0
+1,78,80,77,4,0,0,22,0,0,0,-1--1--1,,1|(567,193)|
+1,79,80,2,100,0,0,22,0,0,0,-1--1--1,,1|(567,250)|
+11,80,156,567,222,8,6,33,3,0,0,4,0,0,0
+10,81,illness,595,222,20,11,40,3,0,0,-1,0,0,0
+10,82,incubation time,683,240,47,11,8,3,0,0,0,0,0,0
+1,83,82,81,1,0,0,0,0,64,0,-1--1--1,,1|(631,247)|
+1,84,2,80,1,0,0,0,0,64,0,-1--1--1,,1|(533,253)|
+1,85,77,23,1,0,0,0,0,64,0,-1--1--1,,1|(772,242)|
+10,86,Recovered,570,-1,40,20,3,3,0,0,0,0,0,0
+1,87,89,86,4,0,0,22,0,0,0,-1--1--1,,1|(568,51)|
+1,88,89,77,100,0,0,22,0,0,0,-1--1--1,,1|(568,112)|
+11,89,348,568,88,8,6,33,3,0,0,4,0,0,0
+10,90,sickness,603,88,27,11,40,3,0,0,-1,0,0,0
+10,91,sickness period,366,40,49,11,8,3,0,0,0,0,0,0
+1,92,91,90,1,0,0,0,0,64,0,-1--1--1,,1|(514,48)|
+1,93,77,89,1,0,0,0,0,64,0,-1--1--1,,1|(541,113)|
+10,94,Dead,386,151,40,20,3,3,0,0,0,0,0,0
+1,95,97,94,4,0,0,22,0,0,0,-1--1--1,,1|(448,151)|
+1,96,97,77,100,0,0,22,0,0,0,-1--1--1,,1|(504,151)|
+11,97,380,476,151,6,8,34,3,0,0,1,0,0,0
+10,98,death,476,170,19,11,40,3,0,0,-1,0,0,0
+10,99,mortality fraction,402,220,53,11,8,3,0,0,0,0,0,0
+1,100,99,98,1,0,0,0,0,64,0,-1--1--1,,1|(442,203)|
+1,101,77,97,1,0,0,0,0,64,0,-1--1--1,,1|(509,128)|
+1,102,91,97,1,0,0,0,0,128,0,-1--1--1,,1|(439,80)|
+10,103,exposure time,304,650,44,11,8,3,0,0,0,0,0,0
+10,104,pulmonary vent rate,330,734,49,19,8,3,0,0,0,0,0,0
+10,105,Ventilation strength,489,783,39,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|0||128-128-128
+10,106,"Wells-Riley",446,664,37,11,8,3,0,0,0,0,0,0
+1,107,105,106,0,0,0,0,0,128,0,-1--1--1,,1|(468,726)|
+1,108,104,106,0,0,0,0,0,128,0,-1--1--1,,1|(388,698)|
+1,109,103,106,0,0,0,0,0,128,0,-1--1--1,,1|(371,656)|
+1,110,106,6,1,0,0,0,0,128,0,-1--1--1,,1|(527,497)|
+1,111,2,106,1,0,0,0,0,128,0,-1--1--1,,1|(565,505)|
+1,112,77,106,1,0,0,0,0,128,0,-1--1--1,,1|(93,191)|
+1,113,56,106,1,0,0,0,0,128,0,-1--1--1,,1|(624,649)|
+///---\\\
+:GRAPH Stocks
+:TITLE Stocks
+:X-AXIS Time
+:SCALE
+:VAR Susceptible
+:VAR Infected
+:L<%^E!@
+1:Current.vdf
+9:Current
+23:0
+15:0,0,0,0,0,0
+19:100,0
+27:0,
+34:0,
+4:Time
+5:Air Density
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:4
+41:0
+42:1
+24:0
+25:250
+26:250
