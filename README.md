@@ -1,6 +1,6 @@
 # Vensim-Experiments
 
-This repository relates to the development of models related to Public Health or the application of its principles.
+This repository relates to the development of models in [Vensim](https://vensim.com/free-download/) related to Public Health or the application of its principles.
 
 ## Epidemiological approach to high-level Cyber-Resilience
 
@@ -16,7 +16,7 @@ This model is part of a Journal paper *"A system dynamics, epidemiological appro
 
 The following files are available:
 * A *pdf* file with a draft of the journal paper.
-* An *mdl* file with a System Dynamics model that can be run in Vensim
+* An *mdl* file with a System Dynamics model that can be run in [Vensim](https://vensim.com/free-download/)
 
 ## Ventilation_vs_Infectivity
 
@@ -28,7 +28,7 @@ This System Dynamcis model is based on a SIR Model, integrating the influence of
 
 The following files are available:
 * An *mdl* file with a System Dynamics model that can be run in Vensim, or 
-* An *ipynb* file that can be opened as a Jupyter Notebook 
+* An *ipynb* file that can be opened as a [Jupyter Notebook](https://github.com/jupyter/notebook) or [Jupyter Lab](https://github.com/jupyterlab/jupyterlab) 
  
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
