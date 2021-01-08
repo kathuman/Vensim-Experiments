@@ -1,0 +1,134 @@
+{UTF-8}
+Activity level of Infected  = A FUNCTION OF( )
+	~	
+	~		|
+
+Activity level of Susceptible=A FUNCTION OF(Activity level of Susceptible) ~~|
+Activity level of Susceptible=
+	~	
+	~		|
+
+BMI  = A FUNCTION OF( )
+	~	
+	~		|
+
+Exposure level  = A FUNCTION OF( Activity level of Susceptible,BMI,Proximity,Virus concentration\
+		)
+	~	
+	~		|
+
+Infected Pop  = A FUNCTION OF( Exposure level,Susceptible Population)
+	~	
+	~		|
+
+Positive Diagnosed  = A FUNCTION OF( Infected Pop)
+	~	
+	~		|
+
+Proximity  = A FUNCTION OF( )
+	~	
+	~		|
+
+Room Size  = A FUNCTION OF( )
+	~	
+	~		|
+
+Sociopolitical Interventions  = A FUNCTION OF( Positive Diagnosed)
+	~	
+	~		|
+
+Susceptible Population  = A FUNCTION OF( Infected Pop)
+	~	
+	~		|
+
+Ventilation level  = A FUNCTION OF( Sociopolitical Interventions)
+	~	
+	~		|
+
+Virus concentration  = A FUNCTION OF( Activity level of Infected,Room Size,Ventilation level\
+		,Virus Prodcution)
+	~	
+	~		|
+
+Virus Prodcution  = A FUNCTION OF( Infected Pop)
+	~	
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Month
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Month
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP 
+	~	Month [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Month [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,100,0
+10,1,Infected Pop,837,319,41,11,8,3,0,0,0,0,0,0
+10,2,Virus Prodcution,798,484,53,11,8,3,0,0,0,0,0,0
+10,3,Virus concentration,601,487,43,19,8,3,0,0,0,0,0,0
+10,4,Exposure level,611,307,46,11,8,3,0,0,0,0,0,0
+1,5,4,1,1,0,0,0,0,128,0,-1--1--1,,1|(735,286)|
+1,6,1,2,1,0,0,0,0,128,0,-1--1--1,,1|(855,390)|
+1,7,2,3,1,0,0,0,0,128,0,-1--1--1,,1|(714,530)|
+1,8,3,4,1,0,0,0,0,128,0,-1--1--1,,1|(562,425)|
+10,9,Ventilation level,774,647,50,11,8,3,0,0,0,0,0,0
+1,10,9,3,1,0,0,0,0,128,0,-1--1--1,,1|(656,601)|
+10,11,Sociopolitical Interventions,967,578,43,19,8,3,0,0,0,0,0,0
+1,12,11,9,1,0,0,0,3,128,0,255-0-0,|0||-1--1--1,1|(899,640)|
+10,13,Activity level of Susceptible,441,262,47,22,8,131,0,0,0,0,0,0
+10,14,Proximity,400,358,31,11,8,3,0,0,0,0,0,0
+1,15,13,4,1,0,0,0,3,128,0,255-0-0,|0||-1--1--1,1|(544,253)|
+10,16,BMI,458,156,17,11,8,3,0,0,0,0,0,0
+1,17,16,4,1,0,0,0,0,128,0,-1--1--1,,1|(555,191)|
+10,18,Activity level of Infected,427,524,49,19,8,131,0,0,0,0,0,0
+1,19,18,3,1,0,0,0,3,128,0,255-0-0,|0||-1--1--1,1|(490,477)|
+1,20,14,4,1,0,0,0,0,128,0,-1--1--1,,1|(500,313)|
+10,21,Positive Diagnosed,1001,404,53,20,8,131,0,0,0,0,0,0
+1,22,1,21,1,0,0,0,0,128,0,-1--1--1,,1|(941,324)|
+1,23,21,11,1,0,0,0,0,128,0,-1--1--1,,1|(1027,494)|
+10,24,Susceptible Population,860,139,37,19,8,3,0,0,0,0,0,0
+1,25,24,1,1,0,0,0,3,128,0,255-0-0,|0||-1--1--1,1|(803,202)|
+1,26,1,24,1,0,0,0,2,129,0,-1--1--1,|0||-1--1--1,1|(905,240)|
+10,27,Room Size,540,626,35,11,8,3,0,0,0,0,0,0
+1,28,27,3,1,0,0,0,0,128,0,-1--1--1,,1|(545,569)|
+///---\\\
+:L<%^E!@
+9:Current
+15:0,0,0,0,0,0
+19:100,0
+27:2,
+34:0,
+5:Positive Diagnosed
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:2
+41:0
+42:1
+24:0
+25:0
+26:0
