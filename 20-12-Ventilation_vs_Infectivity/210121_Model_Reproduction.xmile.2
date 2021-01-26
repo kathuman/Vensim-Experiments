@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0">
+	<header>
+		<product version="1.0" lang="en">Vensim</product>
+		<vendor>Ventana Systems, Inc.</vendor>
+		<created>
+		</created>
+		<modified>
+		</modified>
+		<name>
+		</name>
+		<caption>
+		</caption>
+	</header>
+	<sim_specs method="RK4" time_units="Hour">
+		<start>0</start>
+		<stop>960</stop>
+		<dt>1</dt>
+	</sim_specs>
+	<model>
+		<variables>
+			<stock name="E">
+				<units>Person</units>
+				<doc></doc>
+					<eqn>
+					0
+					</eqn>
+					<inflow>
+					SdR
+					</inflow>
+					<outflow>
+					EdR
+					</outflow>
+			</stock>
+			<stock name="I">
+				<units>Person</units>
+				<doc>Infected State</doc>
+					<eqn>
+					10
+					</eqn>
+					<inflow>
+					EdR
+					</inflow>
+					<outflow>
+					IdR
+					</outflow>
+			</stock>
+			<stock name="R">
+				<units>Person</units>
+				<doc>Immune state</doc>
+					<eqn>
+					0
+					</eqn>
+					<inflow>
+					IdR
+					</inflow>
+			</stock>
+			<stock name="S">
+				<units></units>
+				<doc>Susceptible State</doc>
+					<eqn>
+					199
+					</eqn>
+					<outflow>
+					SdR
+					</outflow>
+			</stock>
+			<aux name="alpha">
+				<units>1/h</units>
+				<doc>progression rate from exposed to infector - reciprocal of the incubation period
+1 per day =  1 day incubation period</doc>
+					<eqn>1/(24*Incubation_period)					</eqn>
+			</aux>
+			<aux name="beta">
+				<units>1/h</units>
+				<doc>contact rate between susceptibles and infectors</doc>
+					<eqn>(p*q)/(V*A)					</eqn>
+			</aux>
+			<aux name="EdR">
+				<units></units>
+				<doc></doc>
+					<eqn>alpha*E					</eqn>
+			</aux>
+			<aux name="gamma">
+				<units>1/h</units>
+				<doc>removal or recovery rate
+0.5 per day = 2 day infectious period</doc>
+					<eqn>1/(24*Infectious_period)					</eqn>
+			</aux>
+			<aux name="IdR">
+				<units></units>
+				<doc></doc>
+					<eqn>gamma*I					</eqn>
+			</aux>
+			<aux name="R0">
+				<units></units>
+				<doc>Basic reproductive ratio:describes the average number of new cases that an
+infector produces in a particular population.
+When
+R 0 <1 the disease dies out, while R 0 >1 indicates that
+the infection rate is greater than the removal rate
+which may potentially lead to an epidemic.</doc>
+					<eqn>((p*q)/(V*A))*((S+E+I+R)/gamma)					</eqn>
+			</aux>
+			<aux name="SdR">
+				<units></units>
+				<doc></doc>
+					<eqn>beta*I*S					</eqn>
+			</aux>
+			<aux name="A">
+				<units>AC/h</units>
+				<doc>Antilation rate in Air Changes per hour</doc>
+					<eqn>3					</eqn>
+			</aux>
+			<aux name="Incubation_period">
+				<units>day</units>
+				<doc>Incubation period 1 per day = 1 day incubation period</doc>
+					<eqn>1					</eqn>
+			</aux>
+			<aux name="Infectious_period">
+				<units>day</units>
+				<doc>Infectious period
+0.5/day = incubation period of 2 days</doc>
+					<eqn>2					</eqn>
+			</aux>
+			<aux name="p">
+				<units>m*m*m/h</units>
+				<doc>Average pulmonary ventilation rate of susceptibles
+8 l/min = 0.48 m3/h</doc>
+					<eqn>0.48					</eqn>
+			</aux>
+			<aux name="q">
+				<units>q/h</units>
+				<doc>quanta production rate per infector</doc>
+					<eqn>10					</eqn>
+			</aux>
+			<aux name="V">
+				<units>m*m*m</units>
+				<doc>Room Volume</doc>
+					<eqn>7200					</eqn>
+			</aux>
+		</variables>
+	</model>
+</xmile>
