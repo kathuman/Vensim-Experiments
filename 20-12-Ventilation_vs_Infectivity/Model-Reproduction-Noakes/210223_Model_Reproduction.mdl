@@ -42,7 +42,7 @@ cv=
 	|
 
 "dC/dt"=
-	(P1/V)-Q1*C
+	(P1/V)-((Q1*V)/V)*C
 	~	Virions/(m*m*m*h)
 	~		|
 
@@ -81,7 +81,7 @@ A=
 	|
 
 alpha=
-	1/(24*Incubation time)
+	1/(Incubation time)
 	~	1/h
 	~	progression rate from exposed to infector - reciprocal of the incubation period
 		1 per day =  1 day incubation period
@@ -105,7 +105,7 @@ EdR=
 	~		|
 
 gamma=
-	1/(24*Infectious time)
+	1/(Infectious time)
 	~	1/h
 	~	removal or recovery rate
 		0.5 per day = 2 day infectious period
@@ -124,14 +124,14 @@ IdR=
 	~		|
 
 Incubation time=
-	1
-	~	day
+	24
+	~	h
 	~	Incubation period 1 per day = 1 day incubation period
 	|
 
 Infectious time=
-	14
-	~	day
+	336
+	~	h
 	~	Infectious period
 		0.5/day = incubation period of 2 days
 	|
@@ -197,7 +197,7 @@ INITIAL TIME  = 0
 	|
 
 SAVEPER  = 
-        TIME STEP
+        TIME STEP 
 	~	Hour [0,?]
 	~	The frequency with which output is stored.
 	|
@@ -355,7 +355,7 @@ B2
 72:0
 73:0
 4:Time
-5:Infectious time
+5:gamma
 35:Date
 36:YYYY-MM-DD
 37:2000

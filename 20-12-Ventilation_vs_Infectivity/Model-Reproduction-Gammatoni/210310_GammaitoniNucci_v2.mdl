@@ -1,0 +1,267 @@
+{UTF-8}
+"dS/dt"=
+	Susceptibles*breathing in quanta*Quanta Effectiveness
+	~	people/Hour
+	~		|
+
+"respiratory flow, infected"=
+	0.5
+	~	m*m*m/Hour
+	~	Can increase/decrease within given ranges according to activity levels
+	|
+
+drops per air volume=
+	10000
+	~	drop/m*m*m
+	~	equivalent to n_d (Bazant)
+	|
+
+drop volume=
+	(4/3)*3.14152*5e-09
+	~	m*m*m/drop
+	~	equivalent to v_d (Bazant)
+		drop volume (estimated to 5 microns in radius)
+	|
+
+virions per liquid volume=
+	1e+10
+	~	virion/m*m*m
+	~	equivalent to c_v (Bazant)
+		Virions per liquid volume. Typically less than 10E9 virions /mL
+	|
+
+virion quanta TEST=
+	"respiratory flow, infected"*drop volume*drops per air volume*virions per liquid volume
+	~	
+	~	Just for checking level and consistency (module to be added to "Virion \
+		quanta" stock- and flow part)
+	|
+
+individual quanta production=
+	6
+	~	quanta/(Hour*people)
+	~		|
+
+quanta production rate=
+	individual quanta production*Infected*mask scaling factor
+	~	quanta/Hour
+	~		|
+
+"% Recirculated air"=
+	0.4
+	~	Dmnl
+	~		|
+
+breathing in quanta=
+	("pulmonary ventilation susceptibles (p sus)" / "volume of room (V)")*Virion quanta*\
+		mask scaling factor
+	~	quanta/Hour
+	~		|
+
+desinfection rate=
+	total air changes per hour*(1-"% Recirculated air")
+	~	1/Hour
+	~	Air Changes per hour, with each air change being equivalent to the volume \
+		of the room in m3, including fresh and recirculated air
+	|
+
+quanta removal rate=
+	Virion quanta*desinfection rate
+	~	quanta/Hour
+	~		|
+
+percentage of infected=
+	(Infected/(Infected+Susceptibles))*100
+	~	Dmnl
+	~		|
+
+mask efficiency=
+	0.95
+	~	Dmnl
+	~	dust/mist respirators with a filter efficiency 95%
+	|
+
+mask scaling factor=
+	1-(mask efficiency-mask efficiency*mask seal leakage)
+	~	Dmnl
+	~		|
+
+mask seal leakage=
+	0.1
+	~	Dmnl
+	~	dust/mist respirators with a face-seal leakage not greater than 10%
+	|
+
+Quanta Effectiveness=
+	1
+	~	1/quanta
+	~	Percentage of quanta exposure that actually causes an infection (%)
+	|
+
+total air changes per hour=
+	6
+	~	1/Hour
+	~		|
+
+Infected= INTEG (
+	"dS/dt",
+		1)
+	~	people
+	~		|
+
+"pulmonary ventilation susceptibles (p sus)"=
+	0.6
+	~	m*m*m/Hour
+	~		|
+
+Susceptibles= INTEG (
+	-"dS/dt",
+		13)
+	~	people
+	~		|
+
+Virion quanta= INTEG (
+	quanta production rate-quanta removal rate,
+		0)
+	~	quanta
+	~		|
+
+"volume of room (V)"=
+	200
+	~	m*m*m
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 400
+	~	Hour
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Hour
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Hour [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.0078125
+	~	Hour [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,100,0
+10,1,"pulmonary ventilation susceptibles (p sus)",252,428,53,35,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,2,"volume of room (V)",361,508,52,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,3,breathing in quanta,455,407,56,25,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,4,1,3,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(384,444)|
+1,5,2,3,1,0,45,0,2,0,0,-1--1--1,|12||0-0-0,1|(439,443)|
+10,6,Virion quanta,700,539,40,20,3,3,0,0,0,0,0,0,0,0,0,0,0,0
+12,7,48,841,539,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,8,10,6,4,0,0,22,0,0,0,-1--1--1,,1|(762,539)|
+1,9,10,7,100,0,0,22,0,0,0,-1--1--1,,1|(816,539)|
+11,10,48,793,539,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,11,quanta production rate,793,576,49,31,40,131,0,0,-1,0,0,0,0,0,0,0,0,0
+12,12,48,545,539,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,13,15,12,4,0,0,22,0,0,0,-1--1--1,,1|(577,539)|
+1,14,15,6,100,0,0,22,0,0,0,-1--1--1,,1|(638,539)|
+11,15,48,608,539,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,16,quanta removal rate,608,564,49,19,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,17,6,3,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(608,444)|
+10,18,Susceptibles,417,260,51,24,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,19,Infected,632,260,53,24,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,20,22,19,4,0,0,22,0,0,0,-1--1--1,,1|(549,260)|
+1,21,22,18,100,0,0,22,0,0,0,-1--1--1,,1|(486,260)|
+11,22,574,512,260,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,23,"dS/dt",512,283,19,11,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,24,19,10,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(772,364)|
+1,25,3,23,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(505,348)|
+1,26,18,23,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(452,320)|
+10,27,individual quanta production,960,447,61,25,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,|12||255-0-0,0,0,0,0,0,0
+1,28,27,11,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(928,495)|
+10,29,desinfection rate,483,655,48,28,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,30,29,16,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(556,620)|
+10,31,Quanta Effectiveness,607,335,52,17,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,32,31,23,1,0,0,0,0,64,0,-1--1--1,,1|(564,300)|
+10,33,"% Recirculated air",312,623,57,17,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,34,33,29,1,0,45,0,2,64,0,-1--1--1,|12||0-0-0,1|(385,648)|
+1,35,6,16,1,0,45,0,2,64,0,-1--1--1,|12||0-0-0,1|(665,619)|
+10,36,percentage of infected,616,115,53,17,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,37,18,36,1,0,0,0,0,64,0,-1--1--1,,1|(479,184)|
+1,38,19,36,1,0,0,0,0,64,0,-1--1--1,,1|(609,212)|
+12,39,918166,1452,212,232,144,3,188,0,0,2,0,0,0,0,0,0,0,0,0
+percentage of infected,Graph
+10,40,mask efficiency,172,196,39,21,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,41,mask seal leakage,101,284,39,17,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,42,mask scaling factor,225,300,44,28,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,43,40,42,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(184,244)|
+1,44,41,42,1,0,45,0,2,64,0,-1--1--1,|12||0-0-0,1|(160,316)|
+1,45,42,3,1,0,45,0,2,64,0,-1--1--1,|12||0-0-0,1|(361,391)|
+10,46,total air changes per hour,312,727,68,17,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,47,46,29,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(440,704)|
+12,48,852628,1451,527,232,165,3,188,0,0,1,0,0,0,0,0,0,0,0,0
+Population
+10,49,mask scaling factor,979,619,45,26,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,50,49,11,1,0,45,0,2,64,0,-1--1--1,|12||0-0-0,1|(896,623)|
+10,51,drops per air volume,900,197,44,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,52,drop volume,1016,224,40,19,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,53,virions per liquid volume,1049,311,53,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,54,virion quanta TEST,923,355,52,29,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,55,51,54,1,0,0,0,0,64,0,-1--1--1,,1|(869,260)|
+1,56,52,54,1,0,0,0,0,64,0,-1--1--1,,1|(968,279)|
+1,57,53,54,1,0,0,0,0,64,0,-1--1--1,,1|(967,343)|
+10,58,"respiratory flow, infected",787,243,53,19,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,59,58,54,1,0,0,0,0,64,0,-1--1--1,,1|(832,312)|
+///---\\\
+:GRAPH Population
+:TITLE Population
+:X-AXIS Time
+:SCALE
+:VAR Infected
+:VAR Susceptibles
+:L<%^E!@
+1:Current.vdfx
+9:Current
+23:0
+15:0,0,0,0,0,0
+19:100,0
+27:0,
+34:0,
+42:1
+72:0
+73:0
+4:Time
+5:virions per liquid volume
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:5
+41:0
+76:0
+77:0
+78:0
+79:0
+80:0
+81:0
+92:0
+24:0
+25:400
+26:400
+91:0
+90:0
+87:0
+75:
+43:
