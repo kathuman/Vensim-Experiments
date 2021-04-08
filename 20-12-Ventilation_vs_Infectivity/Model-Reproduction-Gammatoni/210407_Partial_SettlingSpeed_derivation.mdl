@@ -1,0 +1,112 @@
+{UTF-8}
+acceleration of gravity=
+	9.82
+	~	m/(s*s)
+	~		|
+
+air density=
+	1.204
+	~	kg/(m*m*m)
+	~		|
+
+dynamic viscosity of air=
+	1.807e-05
+	~	kg/(m*s)
+	~		|
+
+particle density=
+	1000
+	~	kg/(m*m*m)
+	~		|
+
+particle diameter=
+	1e-06
+	~	m
+	~		|
+
+settling velocity=
+	acceleration of gravity*particle diameter*particle diameter*(particle density-air density\
+		)/(18*dynamic viscosity of air)
+	~	m/s
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Hour
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Hour
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Hour [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Hour [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,100,0
+10,1,acceleration of gravity,426,573,50,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,2,particle diameter,409,197,48,22,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,3,particle density,276,331,46,19,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,4,air density,274,421,34,21,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,5,dynamic viscosity of air,353,483,57,22,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,6,settling velocity,511,322,46,21,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,7,1,6,1,0,0,0,0,128,0,-1--1--1,,1|(509,443)|
+1,8,2,6,1,0,0,0,0,128,0,-1--1--1,,1|(450,261)|
+1,9,3,6,1,0,0,0,0,128,0,-1--1--1,,1|(387,342)|
+1,10,4,6,1,0,0,0,0,128,0,-1--1--1,,1|(392,394)|
+1,11,5,6,1,0,0,0,0,128,0,-1--1--1,,1|(444,423)|
+12,12,0,1633,177,199,156,3,188,0,0,2,0,0,0,0,0,0,0,0,0
+settling velocity,Graph
+///---\\\
+:L<%^E!@
+1:Z:\home\kathuman\Downloads\Current
+9:Current
+23:0
+15:0,0,0,0,0,0
+19:100,0
+27:0,
+34:0,
+42:1
+72:0
+73:0
+4:Time
+5:particle density
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:5
+41:0
+76:0
+77:0
+78:0
+79:0
+80:0
+81:0
+92:0
+24:0
+25:100
+26:100
+91:0
+90:0
+87:0
+75:
+43:
