@@ -7,8 +7,6 @@ Table breathing rate per physical activity susceptibles(
 		exercise: 1.38, (4)Moderate exercise: 2.35, (5)Heavy exercise: 3.3
 	|
 
-quanta inhaled  = A FUNCTION OF( breathing rate susceptibles,mask scaling factor,Quanta in Room\
-		,volume of room) ~~|
 quanta inhaled=
 	(breathing rate susceptibles / volume of room)*Quanta in Room*mask scaling factor
 	~	quanta/Hour
@@ -961,7 +959,7 @@ h
 9:Current
 23:0
 15:0,0,0,0,0,0
-19:100,2
+19:75,4
 27:0,
 34:0,
 42:1
