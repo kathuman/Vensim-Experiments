@@ -1,13 +1,12 @@
 {UTF-8}
-quanta loss due to UV light  = A FUNCTION OF( Quanta in room ONE POPULATION,"Switch-VentilatorUV"\
-		,UV virion deactivation time) ~~|
-quanta loss due to UV light=
-	Quanta in room ONE POPULATION/UV virion deactivation time
+quanta loss due to Ventilator UV=
+	(Quanta in room ONE POPULATION/UV virion deactivation time)*"Switch-VentilatorUV"
 	~	
 	~		|
 
-"Switch-VentilatorUV"  = A FUNCTION OF( )
-	~	
+"Switch-VentilatorUV"=
+	1
+	~	Dmnl
 	~		|
 
 Asyptomatic= INTEG (
@@ -36,7 +35,7 @@ incubation time=
 
 Quanta in room ONE POPULATION= INTEG (
 	quanta production rate-quanta loss due to deactivation-quanta loss due to filters-quanta loss due to settling\
-		-quanta loss due to UV light-quanta loss due to ventilation,
+		-quanta loss due to Ventilator UV-quanta loss due to ventilation,
 		0)
 	~	quanta
 	~	Level that indicates the accumulation of quanta in a room
@@ -868,7 +867,7 @@ physical activity susceptibles,1,5,1
 V300  Do not put anything below this section - it will be ignored
 *One Quanta Population
 $192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,100,0
-10,1,Quanta in room ONE POPULATION,996,419,71,203,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,1,Quanta in room ONE POPULATION,996,412,71,196,3,131,0,0,0,0,0,0,0,0,0,0,0,0
 12,2,48,1173,346,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
 1,3,5,1,4,0,0,22,0,0,0,-1--1--1,,1|(1086,346)|
 1,4,5,2,100,0,0,22,0,0,0,-1--1--1,,1|(1135,346)|
@@ -882,7 +881,7 @@ $192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,1
 10,12,individual quanta production in exhalation,1246,451,56,34,8,131,0,0,0,0,0,0,0,0,0,0,0,0
 1,13,12,6,1,0,43,0,2,0,0,-1--1--1,|12||0-0-0,1|(1178,420)|
 10,14,"% recirculated air",608,467,59,20,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,|12|B|0-128-0,0,0,0,0,0,0
-1,15,1,11,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(892,364)|
+1,15,1,11,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(891,364)|
 10,16,total air changes per hour,634,405,66,20,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|12||0-128-0,0,0,0,0,0,0
 10,17,air filter efficiency,627,521,42,20,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|12||0-128-0,0,0,0,0,0,0
 10,18,virion deactivation time,652,343,50,27,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|12||0-128-0,0,0,0,0,0,0
@@ -936,18 +935,18 @@ $192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,1
 1,66,65,6,1,0,0,0,0,64,0,-1--1--1,,1|(1220,319)|
 10,67,breathing rate infected,1221,557,61,20,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
 1,68,67,12,1,0,0,0,0,64,0,-1--1--1,,1|(1209,509)|
-12,69,48,787,559,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
-1,70,72,1,100,0,0,22,0,192,0,-1--1--1,,1|(896,562)|
-1,71,72,69,4,0,0,22,0,192,0,-1--1--1,,1|(833,562)|
-11,72,48,861,562,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
-10,73,quanta loss due to UV light,861,590,64,20,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
-1,74,1,73,1,0,0,0,0,192,0,-1--1--1,,1|(904,533)|
+12,69,48,787,555,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,70,72,1,100,0,0,22,0,192,0,-1--1--1,,1|(897,555)|
+1,71,72,69,4,0,0,22,0,192,0,-1--1--1,,1|(834,555)|
+11,72,48,863,555,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,73,quanta loss due to Ventilator UV,863,590,64,27,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,74,1,73,1,0,0,0,0,192,0,-1--1--1,,1|(906,525)|
 10,75,UV virion deactivation time,729,620,50,27,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
-1,76,75,73,1,0,0,0,0,192,0,-1--1--1,,1|(814,631)|
+1,76,75,73,1,0,0,0,0,192,0,-1--1--1,,1|(817,625)|
 10,77,"Symptomatic / Infectious",1355,313,66,20,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
 1,78,77,6,1,0,0,0,0,192,0,-1--1--1,,1|(1281,361)|
-10,79,"Switch-VentilatorUV",770,702,83,13,8,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|0||255-0-0,0,0,0,0,0,0
-1,80,79,73,1,0,0,0,0,192,0,-1--1--1,,1|(831,669)|
+10,79,"Switch-VentilatorUV",772,708,83,13,8,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|0||255-0-0,0,0,0,0,0,0
+1,80,79,73,1,0,0,0,0,192,0,-1--1--1,,1|(834,672)|
 \\\---/// Sketch information - do not modify anything except names
 V300  Do not put anything below this section - it will be ignored
 *Control Panel
@@ -1068,7 +1067,7 @@ virion deactivation time,1,40,0.5
 :L<%^E!@
 1:Current.vdfx
 4:Time
-5:"Switch-VentilatorUV"
+5:quanta loss due to Ventilator UV
 9:Current
 19:100,3
 24:0

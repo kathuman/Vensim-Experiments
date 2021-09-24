@@ -1,13 +1,12 @@
 {UTF-8}
-quanta loss due to UV light  = A FUNCTION OF( Quanta in room ONE POPULATION,"Switch-VentilatorUV"\
-		,UV virion deactivation time) ~~|
 quanta loss due to UV light=
-	Quanta in room ONE POPULATION/UV virion deactivation time
+	(Quanta in room ONE POPULATION/UV virion deactivation time)*"Switch-VentilatorUV"
 	~	
 	~		|
 
-"Switch-VentilatorUV"  = A FUNCTION OF( )
-	~	
+"Switch-VentilatorUV"=
+	1
+	~	Dmnl
 	~		|
 
 Asyptomatic= INTEG (
@@ -946,8 +945,8 @@ $192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,1
 1,76,75,73,1,0,0,0,0,192,0,-1--1--1,,1|(814,631)|
 10,77,"Symptomatic / Infectious",1355,313,66,20,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
 1,78,77,6,1,0,0,0,0,192,0,-1--1--1,,1|(1281,361)|
-10,79,"Switch-VentilatorUV",770,702,83,13,8,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|0||255-0-0,0,0,0,0,0,0
-1,80,79,73,1,0,0,0,0,192,0,-1--1--1,,1|(831,669)|
+10,79,"Switch-VentilatorUV",772,708,83,13,8,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|0||255-0-0,0,0,0,0,0,0
+1,80,79,73,1,0,0,0,0,192,0,-1--1--1,,1|(833,673)|
 \\\---/// Sketch information - do not modify anything except names
 V300  Do not put anything below this section - it will be ignored
 *Control Panel
@@ -1068,7 +1067,7 @@ virion deactivation time,1,40,0.5
 :L<%^E!@
 1:Current.vdfx
 4:Time
-5:"Switch-VentilatorUV"
+5:quanta loss due to UV light
 9:Current
 19:100,3
 24:0
