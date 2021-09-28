@@ -1,12 +1,33 @@
 {UTF-8}
+Desinfection Effectiveness=
+	1-EXP(-UV Dose*Species Specific Contact)
+	~	
+	~		|
+
+Species Specific Contact=
+	1.87
+	~	
+	~		|
+
+UV Dose=
+	((2*(Maximum Irradiance-Initial irradiance)+3*Initial irradiance)/6)*3600*Exposure time\
+		*Exposure time
+	~	microJoule/(cm*cm)
+	~		|
+
+Quanta variation rate=
+	-Desinfection Effectiveness*(Quanta/Ventilation Cycle time)
+	~	quanta/min
+	~		|
+
 Exposure time=
-	(3.14159/4)*Ventilator Head*Ventilator Diameter*Ventilator Diameter/Ventilator Flow
+	(3.14159/4)*(Ventilator Head*Ventilator Diameter*Ventilator Diameter)/Ventilator Flow
 	~	min
 	~		|
 
 Initial irradiance=
-	1e-05
-	~	Watt/(cm*cm)
+	10
+	~	microWatt/(cm*cm)
 	~		|
 
 Initial Quanta=
@@ -14,20 +35,9 @@ Initial Quanta=
 	~	quanta
 	~		|
 
-Irradiance= INTEG (
-	irradiance change rate,
-		Initial irradiance)
-	~	Watt/(cm*cm)
-	~		|
-
-irradiance change rate=
-	Maximum Irradiance/Exposure time
-	~	Watt/(min*cm*cm)
-	~		|
-
 Maximum Irradiance=
-	0.0002
-	~	Watt/(cm*cm)
+	200
+	~	microWatt/(cm*cm)
 	~		|
 
 Quanta= INTEG (
@@ -36,19 +46,9 @@ Quanta= INTEG (
 	~	quanta
 	~		|
 
-Quanta variation rate=
-	-Quanta/Ventilation Cycle time
-	~	quanta/min
-	~		|
-
 Room Volume=
 	5000
 	~	m*m*m
-	~		|
-
-UV Dose=
-	Exposure time*Irradiance*60
-	~	Joule/(cm*cm)
 	~		|
 
 Ventilation Cycle time=
@@ -125,20 +125,17 @@ quanta
 1,20,19,17,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(232,382)|
 10,21,Ventilator Diameter,189,426,42,20,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
 1,22,21,17,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(250,416)|
-10,23,Irradiance,210,183,43,13,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
-12,24,48,68,181,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
-1,25,27,24,100,0,0,22,0,192,0,-1--1--1,,1|(109,181)|
-1,26,27,23,4,0,0,22,0,192,0,-1--1--1,,1|(152,181)|
-11,27,48,131,181,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
-10,28,irradiance change rate,131,209,48,20,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
-10,29,Initial irradiance,234,120,64,13,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
-1,30,29,23,0,0,0,0,0,64,1,-1--1--1,,1|(224,145)|
-10,31,Maximum Irradiance,63,286,43,20,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
-1,32,31,28,1,0,0,0,0,192,0,-1--1--1,,1|(115,273)|
-1,33,17,28,1,0,45,0,2,128,0,-1--1--1,|12||0-0-0,1|(196,247)|
-10,34,UV Dose,344,245,41,13,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
-1,35,23,34,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(272,237)|
-1,36,17,34,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(350,289)|
+10,23,Initial irradiance,210,205,64,13,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,24,Maximum Irradiance,223,272,43,20,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,25,UV Dose,344,245,41,13,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,26,17,25,1,0,43,0,2,128,0,-1--1--1,|12||0-0-0,1|(350,289)|
+1,27,23,25,1,0,0,0,0,192,0,-1--1--1,,1|(259,205)|
+1,28,24,25,1,0,0,0,0,192,0,-1--1--1,,1|(292,276)|
+10,29,Species Specific Contact,376,119,36,27,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,30,Desinfection Effectiveness,486,199,55,20,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,31,29,30,1,0,0,0,0,192,0,-1--1--1,,1|(460,136)|
+1,32,25,30,1,0,0,0,0,192,0,-1--1--1,,1|(379,203)|
+1,33,30,6,1,0,0,0,0,192,0,-1--1--1,,1|(562,238)|
 ///---\\\
 :GRAPH quanta
 :TITLE quanta
@@ -150,7 +147,7 @@ quanta
 :L<%^E!@
 1:current.vdfx
 4:Time
-5:UV Dose
+5:Exposure time
 9:current
 19:100,0
 24:0
