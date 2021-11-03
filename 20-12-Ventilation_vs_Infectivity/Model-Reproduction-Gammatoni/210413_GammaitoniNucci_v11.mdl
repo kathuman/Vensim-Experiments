@@ -1,28 +1,37 @@
 {UTF-8}
-Activity Level Module  = A FUNCTION OF( )
+One Quanta Population Module= INTEG (
+	0*(One Quanta Population Module+Activity Level Module+Infection Module+"Ventilation-UV Module"\
+		),
+		0)
 	~	
 	~		|
 
-"One-Many Switch"  = A FUNCTION OF( Multiple Quanta Population Module,One Quanta Population Module\
-		)
+"One-Many Switch"=
+	0*(Multiple Quanta Population Module+One Quanta Population Module)
 	~	
 	~		|
 
-Multiple Quanta Population Module  = A FUNCTION OF( Activity Level Module,Infection Module\
-		)
+Multiple Quanta Population Module= INTEG (
+	0*(Multiple Quanta Population Module+Activity Level Module+Infection Module),
+		0)
 	~	
 	~		|
 
-Infection Module  = A FUNCTION OF( "One-Many Switch")
+Activity Level Module= INTEG (
+	0,
+		0)
 	~	
 	~		|
 
-"Ventilation-UV Module"  = A FUNCTION OF( )
+"Ventilation-UV Module"= INTEG (
+	0*("Ventilation-UV Module"),
+		0)
 	~	
 	~		|
 
-One Quanta Population Module  = A FUNCTION OF( Activity Level Module,Infection Module\
-		,"Ventilation-UV Module")
+Infection Module= INTEG (
+	0*(Infection Module+"One-Many Switch"),
+		0)
 	~	
 	~		|
 
@@ -1057,11 +1066,11 @@ $192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,9
 V.11 includes the "module" for an Overhead ventilator fitted with UV lights
 12,2,0,141,33,77,13,0,7,0,0,-1,0,0,0,0,0,0,0,0,0
 03 November 2021
-10,3,Infection Module,277,272,39,30,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
-10,4,One Quanta Population Module,692,388,47,30,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
-10,5,Multiple Quanta Population Module,408,734,52,33,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,3,Infection Module,277,272,39,20,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,4,One Quanta Population Module,692,388,50,27,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,5,Multiple Quanta Population Module,408,734,65,27,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
 10,6,Activity Level Module,813,717,40,31,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
-10,7,"One-Many Switch",468,480,36,20,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,7,"One-Many Switch",468,480,45,20,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
 1,8,7,3,1,0,0,0,0,192,0,-1--1--1,,1|(338,364)|
 1,9,4,7,1,0,0,0,0,192,0,-1--1--1,,1|(581,477)|
 1,10,5,7,1,0,0,0,0,192,0,-1--1--1,,1|(421,590)|
@@ -1071,7 +1080,7 @@ V.11 includes the "module" for an Overhead ventilator fitted with UV lights
 1,14,6,5,1,0,0,0,0,192,0,-1--1--1,,1|(616,778)|
 12,15,0,709,147,129,13,0,7,0,16,-1,0,0,0,-1--1--1,0-0-0,|0|BU|0-0-0,0,0,0,0,0,0
 Relationship between modules
-10,16,"Ventilation-UV Module",920,317,49,27,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,16,"Ventilation-UV Module",920,317,61,20,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
 1,17,16,4,1,0,0,0,0,192,0,-1--1--1,,1|(808,330)|
 \\\---/// Sketch information - do not modify anything except names
 V300  Do not put anything below this section - it will be ignored
@@ -1120,10 +1129,11 @@ $192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,9
 :VAR breathing rate susceptibles
 :COMLINE in m3/h
 :L<%^E!@
+1:Current.vdfx
 4:Time
-5:One Quanta Population Module
+5:"Ventilation-UV Module"
 9:Current
-19:100,6
+19:109,4
 24:0
 25:10
 26:10

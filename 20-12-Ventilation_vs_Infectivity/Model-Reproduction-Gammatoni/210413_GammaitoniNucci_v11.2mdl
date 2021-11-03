@@ -1073,6 +1073,10 @@ V.11 includes the "module" for an Overhead ventilator fitted with UV lights
 Relationship between modules
 10,16,"Ventilation-UV Module",920,317,49,27,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
 1,17,16,4,1,0,0,0,0,192,0,-1--1--1,,1|(808,330)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Ventilation -UV
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,100,0
 ///---\\\
 :GRAPH Population
 :TITLE Population
@@ -1119,7 +1123,7 @@ Relationship between modules
 4:Time
 5:One Quanta Population Module
 9:Current
-19:100,5
+19:100,6
 24:0
 25:10
 26:10
