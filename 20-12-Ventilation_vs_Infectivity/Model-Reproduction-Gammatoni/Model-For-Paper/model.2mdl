@@ -1,0 +1,98 @@
+{UTF-8}
+cycle time  = A FUNCTION OF( )
+	~	
+	~		|
+
+"dQ/dt"  = A FUNCTION OF( cycle time,germicidal efficiency,Quanta)
+	~	
+	~		|
+
+germicidal efficiency  = A FUNCTION OF( )
+	~	
+	~		|
+
+Quanta  = A FUNCTION OF( -"dQ/dt")
+	~	
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 100
+	~	Month
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Month
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP 
+	~	Month [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Month [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,259,0
+10,1,Quanta,396,132,42,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,2,48,256,134,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,3,5,1,100,0,0,22,0,192,0,-1--1--1,,1|(337,133)|
+1,4,5,2,4,0,0,22,0,192,0,-1--1--1,,1|(287,133)|
+11,5,0,314,133,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,6,"dQ/dt",314,159,25,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,7,1,6,1,0,43,0,2,128,0,-1--1--1,|0||-1--1--1,1|(334,223)|
+12,8,0,365,184,12,12,4,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B
+10,9,cycle time,217,207,20,21,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,10,9,6,1,0,45,0,2,128,0,-1--1--1,|0||-1--1--1,1|(275,192)|
+10,11,germicidal efficiency,188,121,33,20,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,12,11,6,1,0,43,0,2,128,0,-1--1--1,|0||-1--1--1,1|(261,162)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 2
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,100,0
+///---\\\
+:L<%^E!@
+5:cycle time
+19:259,0
+24:0
+25:0
+26:0
+15:0,0,0,0,0,0
+27:0,
+34:0,
+42:1
+72:0
+73:0
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:2
+41:0
+95:0
+96:0
+97:0
+77:0
+78:0
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
