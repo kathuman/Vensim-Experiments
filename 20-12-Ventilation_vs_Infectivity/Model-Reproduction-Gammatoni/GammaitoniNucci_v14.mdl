@@ -761,7 +761,7 @@ INITIAL TIME  = 0
 	|
 
 SAVEPER  = 
-        TIME STEP 
+        TIME STEP
 	~	Second [0,?]
 	~	The frequency with which output is stored.
 	|
@@ -1446,7 +1446,7 @@ Adjustment_time
 1:wUV-Light.vdfx
 1:Current.vdfx
 4:Time
-5:individual quanta production in exhalation
+5:"% recirculated air"
 9:wUV-Light
 19:90,4
 24:0

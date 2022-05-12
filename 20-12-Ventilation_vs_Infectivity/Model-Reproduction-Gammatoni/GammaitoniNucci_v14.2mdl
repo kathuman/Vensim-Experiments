@@ -348,7 +348,6 @@ Table breathing rate per physical activity infected(
 
 individual quanta production in exhalation=
 	breathing rate infected*viral count per droplet volume*(viral infectivity/100)*"vocal Activity Type:Total droplet volume"
-	*1e+06
 	~	quanta/(Hour*people)
 	~		|
 
@@ -767,7 +766,7 @@ SAVEPER  =
 	~	The frequency with which output is stored.
 	|
 
-TIME STEP  = 0.0078125
+TIME STEP  = 0.125
 	~	Second [0,?]
 	~	The time step for the simulation.
 	|
@@ -1449,7 +1448,7 @@ Adjustment_time
 4:Time
 5:individual quanta production in exhalation
 9:wUV-Light
-19:100,3
+19:90,4
 24:0
 25:4000
 26:4000
