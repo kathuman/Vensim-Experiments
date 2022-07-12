@@ -1,0 +1,907 @@
+{UTF-8}
+Infection Module= INTEG (
+	0*(Infection Module+Quanta Population Module),
+		0)
+	~	
+	~		|
+
+"Switch-Ventilator UV"=
+	1
+	~	Dmnl [0,1,1]
+	~		|
+
+quanta loss due to Ventilator UV=
+	"Switch-Ventilator UV"*germicidal effectiveness*(Quanta in room/cycle time)
+	~	quanta/Minute
+	~		|
+
+quanta concentration=
+	Quanta in room/volume of room
+	~	quanta/(m*m*m)
+	~		|
+
+cycle time=
+	(volume of room/ventilator flow)
+	~	Minute
+	~		|
+
+Infective particles surviving fraction
+	=0.181124
+	~	Dmnl
+	~		|
+
+germicidal effectiveness=
+	1-Infective particles surviving fraction
+	~	Dmnl
+	~		|
+
+risk increase rate=
+	(1-Infection Risk)*quanta concentration*breathing rate susceptibles*mask scaling factor\
+		/3600
+	~	1/Minute
+	~		|
+
+exposure rate=
+	Susceptibles*Infection Risk
+	~	people/Minute
+	~		|
+
+Infection Risk= INTEG (
+	risk increase rate,
+		0)
+	~	Dmnl
+	~		|
+
+percentage of infected=
+	IF THEN ELSE( (Asyptomatic+Susceptibles)=0 , 0, (Asyptomatic/(Asyptomatic+Susceptibles\
+		+"Symptomatic / Infectious"))*100 )
+	~	Dmnl
+	~		|
+
+Initial Infected=
+	1
+	~	people
+	~		|
+
+Initial Susceptible Population=
+	60
+	~	people
+	~		|
+
+Pct Remaining Quanta=
+	IF THEN ELSE(Initial Quanta in Room=0,0,(Quanta in room/Initial Quanta in Room)*100)
+	~	Dmnl
+	~		|
+
+quanta production rate=
+	individual quanta production in exhalation*(External persons infected in room+"Symptomatic / Infectious"\
+		)*mask scaling factor*"Switch- Quanta Production"
+	~	quanta/Minute
+	~		|
+
+"Switch- Quanta Production"=
+	1
+	~	Dmnl
+	~	Switch to control whether the model considers Quanta production. 0:No \
+		Quanta Production / 1:Quanta Production
+	|
+
+Initial Quanta in Room=
+	100000
+	~	quanta
+	~		|
+
+Quanta in room= INTEG (
+	quanta production rate-quanta loss due to deactivation-quanta loss due to filters-quanta loss due to settling\
+		-quanta loss due to ventilation-quanta loss due to Ventilator UV,
+		Initial Quanta in Room)
+	~	quanta
+	~	Level that indicates the accumulation of quanta in a room
+	|
+
+mindistance=
+	0.02
+	~	m [1e-05,1,1e-05]
+	~	minimum distance to the UV light source
+	|
+
+species specific constant=
+	1870
+	~	(cm*cm)/(W*Second)
+	~	FEM Model used a reference k of 1.87 cm2/(mW.s) for MS2
+	|
+
+ventilator flow=
+	350
+	~	(m*m*m)/Minute
+	~	Air moved by the ventilator in m^3/minute
+	|
+
+ventilator head=
+	2.41
+	~	m
+	~	Distance from the celiling to the ventilator blades
+	|
+
+error=
+	1e-20
+	~	Second
+	~	Time correction factor to avoid an initial divison by zero at the start of \
+		the simulation.
+	|
+
+exposure time=
+	(3.14159/4)*((ventilator head*ventilator diameter*ventilator diameter)/ventilator flow\
+		)*60
+	~	Second
+	~	Exposure time, the time particles are axposed to UV light duiring their \
+		path from the ceiling to the ventilator blades
+	|
+
+ventilator diameter=
+	3
+	~	m
+	~	Diameter of the area covered by the rotating ventilator blades.
+	|
+
+Quanta Population Module= INTEG (
+	0*(Quanta Population Module+Activity Level Module+Infection Module+"Ventilation-UV Module"\
+		),
+		0)
+	~	
+	~		|
+
+Multiple Quanta Population Module= INTEG (
+	0*(Multiple Quanta Population Module+Activity Level Module+Infection Module),
+		0)
+	~	
+	~		|
+
+Activity Level Module= INTEG (
+	0,
+		0)
+	~	
+	~		|
+
+"Ventilation-UV Module"= INTEG (
+	0*("Ventilation-UV Module"),
+		0)
+	~	
+	~		|
+
+Asyptomatic= INTEG (
+	exposure rate-incubation rate,
+		0)
+	~	people
+	~	Population in the model that has been infectd but has not yet shown \
+		symptoms and has not yet become infectious.
+	|
+
+incubation time=
+	7920
+	~	Second
+	~	240 hours
+	|
+
+recovery time=
+	16200
+	~	Second
+	~	240 Hours
+	|
+
+recovery rate=
+	"Symptomatic / Infectious"/recovery time
+	~	people/Minute
+	~		|
+
+"Symptomatic / Infectious"= INTEG (
+	incubation rate-recovery rate,
+		Initial Infected)
+	~	people
+	~		|
+
+Recovered= INTEG (
+	recovery rate,
+		0)
+	~	people
+	~		|
+
+incubation rate=
+	Asyptomatic/incubation time
+	~	people/Minute
+	~		|
+
+"time to recovery/death"=
+	16200
+	~	Hour
+	~	Approx. 11 days of symptomatic illness in general
+	|
+
+basic reproduction number=
+	ZIDZ(exposure rate,infectious pop) * (incubation period+"time to recovery/death")
+	~	Dmnl
+	~		|
+
+incubation period=
+	7920
+	~	Hour
+	~	Equivalent to 5.5 days (5,5 * 24*60)
+	|
+
+infectious pop=
+	External persons infected in room+Asyptomatic
+	~	people
+	~	Discard stock "Exposed" as these are not yet contagious in our model?
+	|
+
+Table breathing rate per physical activity susceptibles(
+	[(0,0)-(10,10)],(1,0.49),(2,0.54),(3,1.38),(4,2.35),(5,3.3))
+	~	
+	~	The breathing rate in m3/h depending on the type of activity. See \
+		(Buonanno et al, 2020), (1)Resting: 0.49 (2)Standing: 0.54, (3)Light \
+		exercise: 1.38, (4)Moderate exercise: 2.35, (5)Heavy exercise: 3.3
+	|
+
+breathing rate susceptibles=
+	Table breathing rate per physical activity susceptibles(physical activity susceptibles\
+		)/60
+	~	m*m*m/Minute
+	~		|
+
+physical activity susceptibles=
+	1
+	~	Dmnl
+	~		|
+
+physical activity infected=
+	3
+	~	Dmnl
+	~	Skagit Valley: light exercise
+	|
+
+breathing rate infected=
+	Table breathing rate per physical activity infected(physical activity infected)/60
+	~	m*m*m/Minute
+	~		|
+
+Table breathing rate per physical activity infected(
+	[(0,0)-(10,10)],(1,0.49),(2,0.54),(3,1.38),(4,2.35),(5,3.3))
+	~	
+	~	The breathing rate in m3/h depending on the type of activity. See \
+		(Buonanno et al, 2020), (1)Resting: 0.49 (2)Standing: 0.54, (3)Light \
+		exercise: 1.38, (4)Moderate exercise: 2.35, (5)Heavy exercise: \
+		3.3\!Dmnl\!m*m*m/Hour
+	|
+
+individual quanta production in exhalation=
+	breathing rate infected*viral count per droplet volume*(viral infectivity/100)*"vocal Activity Type:Total droplet volume"
+	~	quanta/(Hour*people)
+	~		|
+
+Prod Rate4=
+	individual quanta production in exhalation*External persons infected in room*mask scaling factor
+	~	quanta/Hour
+	~		|
+
+quanta loss due to settling=
+	Quanta in room*particle settling speed/room height
+	~	quanta/Minute
+	~		|
+
+mask scaling factor=
+	1-(mask efficiency-mask efficiency*mask seal leakage)
+	~	Dmnl
+	~		|
+
+Prod Rate1=
+	individual quanta production in exhalation*mask scaling factor*External persons infected in room
+	~	people/Hour
+	~		|
+
+Prod Rate2=
+	individual quanta production in exhalation*mask scaling factor*External persons infected in room
+	~	quanta/Hour
+	~		|
+
+Prod Rate3=
+	individual quanta production in exhalation*mask scaling factor*External persons infected in room
+	~	quanta/Hour
+	~		|
+
+External persons infected in room=
+	0
+	~	people
+	~	1 infected person from hour 10 to our 10.5
+	|
+
+mask seal leakage=
+	1
+	~	Dmnl
+	~	dust/mist respirators with a face-seal leakage not greater than 10%
+	|
+
+"% recirculated air"=
+	0
+	~	Dmnl
+	~		|
+
+air density=
+	1.204
+	~	kg/(m*m*m)
+	~		|
+
+air filter efficiency=
+	0
+	~	Dmnl
+	~	Ventilation system filter efficiency
+	|
+
+quanta loss due to ventilation=
+	max(0,Quanta in room*(total air changes per hour/60)*(1-"% recirculated air"))
+	~	quanta/Minute
+	~	Loss of quanta in the room due to external air being driven to the room \
+		every air change
+	|
+
+acceleration of gravity=
+	9.82
+	~	m/(s*s)
+	~		|
+
+total air changes per hour=
+	0
+	~	1/Hour
+	~		|
+
+particle density=
+	1000
+	~	kg/(m*m*m)
+	~		|
+
+particle diameter=
+	3e-06
+	~	m
+	~		|
+
+particle settling speed=
+	(acceleration of gravity*particle diameter*particle diameter*(particle density-air density\
+		)/(dynamic viscosity air))*(2/9)/60
+	~	m/Minute
+	~	settling speed of 1mm/s = 1*(1/1000)* 3600 m/h
+	|
+
+viral infectivity=
+	5
+	~	Dmnl
+	~	Infectivity varies from 1% to 10%
+	|
+
+viral count per droplet volume=
+	1e+08
+	~	virion/mL
+	~	10^2 - 10^11 [copies/mL]
+	|
+
+dynamic viscosity air=
+	1.807e-05
+	~	kg/(m*s)
+	~		|
+
+quanta loss due to filters=
+	max(Quanta in room*(total air changes per hour/60)*"% recirculated air"*air filter efficiency\
+		,0)
+	~	quanta/Minute
+	~	Quanta per hour that are lost from the room due to being filtererd by the \
+		ventilation system's filters
+	|
+
+quanta loss due to deactivation=
+	0*max(0,Quanta in room/virion deactivation time)
+	~	people/Minute
+	~	the loss of quanta due to deactivation factors, both internal (half life) \
+		or external (UV light, Desinfectants)
+	|
+
+"vocal Activity Type:Total droplet volume"=
+	2.33262e-12
+	~	Dmnl
+	~	the total volume m3 of droplets per m3 of air, and for different vocal activities \
+		(see Buonanno et al, 2020).
+		Buonanno et al considers the following activities and values:
+		Voiced Counting:	1.10904838960243E-11
+		Whispered Counting:	2.69011646773751E-12
+		Unmodulated vocalization:	6.94712321540395E-11
+		Breathing:	2.3326157901296E-12
+	|
+
+virion deactivation time=
+	95
+	~	Minute
+	~	0-0.63 [1/h]
+	|
+
+"1-2 decr time"=
+	3
+	~	Hour
+	~		|
+
+"2-3 decr time"=
+	3
+	~	Hour
+	~		|
+
+"3-4 decr time"=
+	3
+	~	Hour
+	~		|
+
+volume of room=
+	room area*room height
+	~	m*m*m
+	~		|
+
+room height=
+	4.6
+	~	m
+	~		|
+
+room area=
+	120
+	~	m*m
+	~		|
+
+mask efficiency=
+	0
+	~	Dmnl
+	~	dust/mist respirators with a filter efficiency 95%
+	|
+
+Susceptibles= INTEG (
+	-exposure rate,
+		Initial Susceptible Population)
+	~	people
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 30
+	~	Minute
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Minute
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP 
+	~	Minute [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.015625
+	~	Minute [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Infection
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,100,0
+10,1,volume of room,839,640,75,30,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,2,Susceptibles,791,268,50,26,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,3,Asyptomatic,998,269,52,26,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,4,6,3,4,0,0,22,0,0,0,-1--1--1,,1|(924,269)|
+1,5,6,2,100,0,0,22,0,0,0,-1--1--1,,1|(864,269)|
+11,6,0,895,269,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,7,exposure rate,895,307,75,30,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,8,2,7,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(887,341)|
+10,9,percentage of infected,951,135,75,30,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,10,2,9,1,0,0,2,3,64,0,128-128-128,|||0-0-0,1|(846,203)|
+1,11,3,9,1,0,0,2,3,64,0,128-128-128,|||0-0-0,1|(977,232)|
+10,12,mask efficiency,605,466,75,30,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,13,mask seal leakage,575,556,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,14,quanta concentration,911,576,75,30,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,15,1,14,1,0,45,0,2,0,0,-1--1--1,|||0-0-0,1|(898,611)|
+10,16,room area,714,629,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,17,room height,755,696,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+1,18,16,1,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(763,652)|
+1,19,17,1,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(796,684)|
+10,20,mask scaling factor,717,530,75,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,21,12,20,1,0,45,0,2,64,0,-1--1--1,|||0-0-0,1|(684,489)|
+1,22,13,20,1,0,43,0,2,64,0,-1--1--1,|||0-0-0,1|(665,574)|
+10,23,Quanta in room,1234,561,75,30,8,130,0,3,-1,0,0,0,255-255-255,0-0-0,|||0-0-255,0,0,0,0,0,0
+10,24,breathing rate susceptibles,662,399,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||0-0-255,0,0,0,0,0,0
+10,25,basic reproduction number,352,240,75,30,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,26,Asyptomatic,245,402,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,27,incubation period,295,122,75,30,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,28,27,25,1,0,0,0,0,128,0,-1--1--1,,1|(354,186)|
+10,29,exposure rate,228,252,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,30,29,25,1,0,0,0,0,128,0,-1--1--1,,1|(288,231)|
+10,31,"time to recovery/death",224,171,75,30,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,32,31,25,1,0,0,0,0,128,0,-1--1--1,,1|(291,191)|
+10,33,External persons infected in room,166,325,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,34,infectious pop,302,329,75,30,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,35,33,34,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(260,321)|
+1,36,26,34,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(268,350)|
+1,37,34,25,1,0,0,0,0,128,0,-1--1--1,,1|(336,294)|
+10,38,"Symptomatic / Infectious",1219,271,59,29,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,39,41,3,100,0,0,22,0,192,0,-1--1--1,,1|(1072,268)|
+1,40,41,38,4,0,0,22,0,192,0,-1--1--1,,1|(1133,268)|
+11,41,0,1100,268,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,42,incubation rate,1100,306,75,30,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,43,incubation time,1137,367,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,44,43,42,1,0,45,0,2,128,0,-1--1--1,|||0-0-0,1|(1124,320)|
+1,45,3,42,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(1082,344)|
+10,46,Recovered,1437,274,44,28,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,47,49,38,100,0,0,22,0,192,0,-1--1--1,,1|(1304,273)|
+1,48,49,46,4,0,0,22,0,192,0,-1--1--1,,1|(1367,273)|
+11,49,0,1336,273,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,50,recovery rate,1336,311,75,30,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,51,recovery time,1357,426,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,52,51,50,1,0,45,0,2,128,0,-1--1--1,|||0-0-0,1|(1369,354)|
+1,53,38,50,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(1321,346)|
+10,54,Initial Susceptible Population,709,174,75,30,8,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+1,55,54,2,0,0,0,2,2,64,1,-1--1--1,|||0-0-0,1|(0,0)|
+10,56,Initial Infected,1289,158,75,30,8,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+1,57,56,38,0,0,0,2,2,64,1,-1--1--1,|||0-0-0,1|(0,0)|
+1,58,38,9,1,0,0,2,3,192,0,128-128-128,|||0-0-0,1|(1044,143)|
+10,59,Infection Risk,978,415,58,13,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,60,48,783,412,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,61,63,60,100,0,0,22,0,192,0,-1--1--1,,1|(828,412)|
+1,62,63,59,4,0,0,22,0,192,0,-1--1--1,,1|(890,412)|
+11,63,0,855,412,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,64,risk increase rate,855,450,75,30,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,65,59,7,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(929,323)|
+1,66,14,64,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(850,495)|
+1,67,24,64,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(734,453)|
+1,68,20,64,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(814,489)|
+1,69,59,64,1,0,45,0,2,128,0,-1--1--1,|||0-0-0,1|(889,485)|
+12,70,0,840,325,14,14,5,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B1
+12,71,0,1043,323,14,14,5,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B2
+12,72,0,1273,329,14,14,5,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B3
+12,73,0,917,451,14,14,4,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B4
+12,74,0,1076,574,23,23,4,7,0,0,-1,0,0,0,0,0,0,0,0,0
+R1
+1,75,23,14,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(1030,625)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Activity level
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,112,0
+10,1,physical activity infected,469,141,75,30,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,2,breathing rate infected,520,238,75,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,3,Table breathing rate per physical activity infected,635,145,75,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+12,4,0,840,323,89,36,8,7,0,0,-1,0,0,0,0,0,0,0,0,0
+(1)Resting, (2)Standing, (3)Light exercise, (4)Moderate exercise, (5)Heavy exercise
+1,5,1,2,1,0,0,0,0,64,0,-1--1--1,,1|(499,191)|
+1,6,3,2,0,0,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,7,physical activity susceptibles,453,386,75,30,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,8,breathing rate susceptibles,501,475,75,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,9,Table breathing rate per physical activity susceptibles,624,388,75,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,10,7,8,1,0,0,0,0,64,0,-1--1--1,,1|(481,428)|
+1,11,9,8,1,0,0,0,0,64,0,-1--1--1,,1|(547,428)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Quanta Population
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,100,0
+10,1,Quanta in room,958,457,268,199,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+12,2,48,1452,449,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,3,5,1,4,0,0,22,0,0,0,-1--1--1,,1|(1307,449)|
+1,4,5,2,100,0,0,22,0,0,0,-1--1--1,,1|(1415,449)|
+11,5,0,1396,449,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,6,quanta production rate,1396,487,75,30,40,131,0,0,-1,0,0,0,0,0,0,0,0,0
+12,7,48,422,511,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,8,10,7,4,0,0,22,0,0,0,-1--1--1,,1|(474,511)|
+1,9,10,1,100,0,0,22,0,0,0,-1--1--1,,1|(603,511)|
+11,10,0,509,511,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,11,quanta loss due to ventilation,509,549,75,30,40,131,0,0,-1,0,0,0,0,0,0,0,0,0
+10,12,individual quanta production in exhalation,1524,568,75,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,13,12,6,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(1448,554)|
+10,14,"% recirculated air",246,553,75,30,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,||B|0-128-0,0,0,0,0,0,0
+1,15,1,11,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(585,479)|
+10,16,total air changes per hour,264,464,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,17,air filter efficiency,312,668,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,18,virion deactivation time,282,402,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+12,19,48,419,632,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,20,22,19,4,0,0,22,0,0,0,-1--1--1,,1|(473,632)|
+1,21,22,1,100,0,0,22,0,0,0,-1--1--1,,1|(604,632)|
+11,22,0,511,632,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,23,quanta loss due to filters,511,670,75,30,40,131,0,0,-1,0,0,0,0,0,0,0,0,0
+12,24,48,413,283,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,25,27,24,4,0,0,22,0,0,0,-1--1--1,,1|(463,283)|
+1,26,27,1,100,0,0,22,0,0,0,-1--1--1,,1|(597,283)|
+11,27,0,496,283,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,28,quanta loss due to settling,496,321,75,30,40,131,0,0,-1,0,0,0,0,0,0,0,0,0
+12,29,48,414,396,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,30,32,29,4,0,0,22,0,0,0,-1--1--1,,1|(467,396)|
+1,31,32,1,100,0,0,22,0,0,0,-1--1--1,,1|(600,396)|
+11,32,0,503,396,8,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,33,quanta loss due to deactivation,503,434,75,30,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,34,1,23,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(639,579)|
+1,35,1,33,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(570,371)|
+1,36,1,28,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(587,250)|
+1,37,18,33,0,0,45,0,2,0,0,-1--1--1,|||0-0-0,1|(0,0)|
+1,38,16,11,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(408,474)|
+1,39,16,23,1,0,45,0,2,128,0,-1--1--1,|||0-0-0,1|(344,497)|
+1,40,14,11,1,0,45,0,2,0,0,-1--1--1,|||0-0-0,1|(346,574)|
+1,41,14,23,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(331,625)|
+1,42,17,23,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(380,692)|
+10,43,"vocal Activity Type:Total droplet volume",1704,665,75,30,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,44,viral count per droplet volume,1709,584,75,30,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,45,viral infectivity,1733,520,75,30,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+1,46,45,12,0,0,0,0,0,64,0,-1--1--1,,1|(0,0)|
+1,47,44,12,0,0,0,0,0,64,0,-1--1--1,,1|(0,0)|
+1,48,43,12,1,0,0,0,0,64,0,-1--1--1,,1|(1590,637)|
+10,49,particle settling speed,215,247,75,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,50,49,28,1,0,43,0,2,0,0,-1--1--1,|||0-0-0,1|(359,332)|
+10,51,particle diameter,265,166,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,52,particle density,165,124,75,30,8,131,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,53,air density,88,253,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,54,dynamic viscosity air,97,308,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,55,acceleration of gravity,116,184,75,30,8,3,0,2,0,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+1,56,51,49,1,0,0,0,0,64,0,-1--1--1,,1|(247,210)|
+1,57,52,49,1,0,0,0,0,64,0,-1--1--1,,1|(200,190)|
+1,58,53,49,1,0,0,0,0,64,0,-1--1--1,,1|(164,271)|
+1,59,54,49,1,0,0,0,0,64,0,-1--1--1,,1|(174,298)|
+1,60,55,49,1,0,0,0,0,64,0,-1--1--1,,1|(152,221)|
+10,61,room height,541,153,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||0-128-0,0,0,0,0,0,0
+1,62,61,28,1,0,45,0,2,0,0,-1--1--1,|||0-0-0,1|(510,232)|
+10,63,mask scaling factor,1425,358,75,30,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|||0-128-0,0,0,0,0,0,0
+1,64,63,6,1,0,0,0,0,64,0,-1--1--1,,1|(1431,475)|
+10,65,External persons infected in room,1630,313,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||0-0-255,0,0,0,0,0,0
+1,66,65,6,1,0,0,0,0,64,0,-1--1--1,,1|(1529,438)|
+10,67,breathing rate infected,1527,714,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||0-0-255,0,0,0,0,0,0
+1,68,67,12,1,0,0,0,0,64,0,-1--1--1,,1|(1503,644)|
+12,69,48,894,836,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,70,72,1,100,0,0,22,0,192,0,-1--1--1,,1|(894,676)|
+1,71,72,69,4,0,0,22,0,192,0,-1--1--1,,1|(894,766)|
+11,72,0,894,704,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,73,quanta loss due to Ventilator UV,894,742,75,30,40,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,74,1,73,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(804,702)|
+10,75,"Symptomatic / Infectious",1651,450,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||0-0-255,0,0,0,0,0,0
+1,76,75,6,1,0,0,0,0,192,0,-1--1--1,,1|(1579,503)|
+10,77,cycle time,1005,820,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,78,77,73,1,0,45,0,2,128,0,-1--1--1,|||0-0-0,1|(920,773)|
+10,79,volume of room,1145,785,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,80,ventilator flow,1170,855,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||0-128-0,0,0,0,0,0,0
+1,81,79,77,0,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(0,0)|
+1,82,80,77,1,0,45,0,2,128,0,-1--1--1,|||0-0-0,1|(1063,843)|
+10,83,germicidal effectiveness,1034,706,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,84,83,73,1,0,43,0,2,128,0,-1--1--1,|||0-0-0,1|(971,696)|
+10,85,"Switch- Quanta Production",1353,570,75,30,8,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|||255-0-0,0,0,0,0,0,0
+1,86,85,6,1,0,0,2,3,192,0,128-128-128,|||0-0-0,1|(1360,532)|
+10,87,Initial Quanta in Room,1013,115,75,30,8,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|||0-128-0,0,0,0,0,0,0
+1,88,87,1,0,0,0,2,3,192,1,128-128-128,|||0-0-0,1|(0,0)|
+10,89,Pct Remaining Quanta,781,167,75,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,90,1,89,1,0,0,2,3,192,0,128-128-128,|||0-0-0,1|(899,236)|
+1,91,87,89,1,0,0,2,3,192,0,128-128-128,|||0-0-0,1|(899,109)|
+10,92,Infective particles surviving fraction,1168,702,75,30,8,3,0,2,-1,0,0,0,-1--1--1,0-0-128,|||64-160-98,0,0,0,0,0,0
+1,93,92,83,1,0,0,0,0,192,0,-1--1--1,,1|(1101,734)|
+10,94,"Switch-Ventilator UV",769,810,75,30,8,3,0,2,-1,0,0,0,-1--1--1,0-0-0,|||255-0-0,0,0,0,0,0,0
+1,95,94,73,1,0,0,2,3,192,0,128-128-128,|||0-0-0,1|(824,768)|
+12,96,0,639,262,14,14,5,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B5|<<NnN>>|
+12,97,0,626,365,14,14,5,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B6|<<NnN>>|
+12,98,0,641,475,14,14,5,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B7|<<NnN>>|
+12,99,0,648,601,14,14,5,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B8|<<NnN>>|
+12,100,0,845,680,14,14,5,7,0,0,-1,0,0,0,0,0,0,0,0,0
+B9|<<NnN>>|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Control Panel
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,90,0
+10,1,External persons infected in room,135,162,75,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+12,2,0,433,239,180,142,3,188,0,0,2,0,0,0,0,0,0,0,0,0
+External persons infected in room,Graph
+12,3,0,393,36,369,24,8,135,0,8,-1,0,0,0,-1--1--1,0-0-0,|20||0-0-0,0,0,0,0,0,0
+Control Room : Ventilation-Activity-Pathogen Infectivity Model
+12,4,0,734,111,68,19,8,135,0,26,-1,0,0,0,-1--1--1,-1--1--1,|16|U|0-0-255,0,0,0,0,0,0
+PATHOGEN
+12,5,0,996,42,45,13,8,7,0,24,-1,0,0,0,-1--1--1,-1--1--1,|16|U|0-0-0,0,0,0,0,0,0
+OUTPUT
+12,6,0,1761,273,244,212,3,188,0,0,2,0,0,0,0,0,0,0,0,0
+percentage of infected,Graph
+12,7,0,1762,699,243,207,3,188,0,0,2,0,0,0,0,0,0,0,0,0
+quanta concentration,Graph
+12,8,0,114,461,52,13,8,7,0,26,-1,0,0,0,-1--1--1,-1--1--1,|16|U|0-0-255,0,0,0,0,0,0
+ACTIVITY
+12,9,0,586,769,84,20,8,135,0,26,-1,0,0,0,-1--1--1,0-0-0,|16|U|0-0-255,0,0,0,0,0,0
+VENTILATION
+12,10,0,160,562,96,34,3,252,0,0,0,0,0,0,0,0,0,0,0,0
+physical activity susceptibles,1,5,1
+12,11,0,402,691,104,41,8,135,0,8,-1,0,0,0,-1--1--1,0-0-0,|14||0-0-0,0,0,0,0,0,0
+1. Breathing 2. Unmodulated vocalization 3. Whispered counting 4. Voiced Counting
+12,12,0,681,458,80,19,8,135,0,26,-1,0,0,0,-1--1--1,-1--1--1,|16|U|0-0-255,0,0,0,0,0,0
+PROTECTION
+12,13,0,802,865,75,49,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+room area,14,350,5
+12,14,0,806,804,74,47,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+room height,1,10,0.5
+12,15,0,692,494,80,37,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+mask efficiency,0,1,0.01
+12,16,0,692,566,79,34,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+mask seal leakage,0,1,0.01
+12,17,0,752,168,67,31,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+viral infectivity,0,100,1
+12,18,0,382,546,94,33,8,7,0,8,-1,0,0,0,-1--1--1,0-0-0,|14||0-0-0,0,0,0,0,0,0
+(1)Resting, (2)Standing, (3)Light exercise, (4)Moderate exercise, (5)Heavy exercise
+12,19,0,161,500,96,39,3,252,0,0,0,0,0,0,0,0,0,0,0,0
+physical activity infected,1,5,1
+12,20,0,565,815,88,36,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+total air changes per hour,0,12,0.1
+12,21,0,855,865,23,13,8,7,0,0,-1,0,0,0,0,0,0,0,0,0
+[m2]
+12,22,0,861,804,19,13,8,7,0,0,-1,0,0,0,0,0,0,0,0,0
+[m]
+12,23,0,565,948,89,37,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+"% recirculated air",0,1,0.01
+12,24,0,567,880,88,32,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+air filter efficiency,0,1,0.01
+12,25,0,754,242,70,36,3,124,0,0,0,0,0,0,0,0,0,0,0,0
+virion deactivation time,1,120,0.5
+12,26,0,841,218,16,13,8,7,0,0,-1,0,0,0,0,0,0,0,0,0
+[h]
+12,27,0,813,150,9,12,8,7,0,0,-1,0,0,0,0,0,0,0,0,0
+%
+12,28,0,1232,699,280,207,3,15,0,0,2,0,0,0,0,0,0,0,0,0
+Pct Remaining Quanta,Graph
+12,29,0,141,920,66,45,3,79,0,0,0,0,0,0,0,0,0,0,0,0
+"Switch- Quanta Production",0,1,1
+10,30,Initial Quanta in Room,133,226,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,31,Initial Susceptible Population,133,294,75,30,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+12,32,0,1231,273,281,214,3,15,0,0,1,0,0,0,0,0,0,0,0,0
+Population
+12,33,0,142,846,65,47,8,79,0,0,0,0,0,0,0,0,0,0,0,0
+"Switch-Ventilator UV",0,1,1
+12,34,0,116,798,52,13,8,7,0,26,-1,0,0,0,-1--1--1,-1--1--1,|16|U|0-0-255,0,0,0,0,0,0
+SWITCHES
+12,35,0,367,495,78,8,8,7,0,26,-1,0,0,0,-1--1--1,-1--1--1,|16|U|0-0-255,0,0,0,0,0,0
+Physical Activity
+12,36,0,107,103,68,19,8,135,0,26,-1,0,0,0,-1--1--1,-1--1--1,|16|U|0-0-255,0,0,0,0,0,0
+PEOPLE
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*README
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|255-255-255|96,96,100,0
+12,1,0,388,61,285,13,0,7,0,0,-1,0,0,0,0,0,0,0,0,0
+v220510 - separate infection model from UV germicidal model, eliminate multiple quanta populations
+12,2,0,141,33,56,13,0,7,0,0,-1,0,0,0,0,0,0,0,0,0
+10 May 2022
+10,3,Infection Module,462,341,39,20,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,4,Quanta Population Module,692,388,50,27,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,5,Activity Level Module,719,536,40,31,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,6,3,4,1,0,0,0,0,192,0,-1--1--1,,1|(630,338)|
+1,7,5,4,1,0,0,2,3,192,0,0-0-0,|||0-0-0,1|(732,462)|
+12,8,0,634,206,186,17,0,7,0,24,-1,0,0,0,-1--1--1,0-0-0,|18|BU|0-0-0,0,0,0,0,0,0
+Relationship between modules
+12,9,0,610,298,46,20,8,7,0,2,-1,0,0,0,-1--1--1,0-0-0,|||255-0-0,0,0,0,0,0,0
+Infective Population
+12,10,0,547,449,38,20,8,7,0,2,-1,0,0,0,-1--1--1,0-0-0,|||255-0-0,0,0,0,0,0,0
+Infective Quanta
+12,11,0,798,463,59,27,8,7,0,2,-1,0,0,0,-1--1--1,0-0-0,|||255-0-0,0,0,0,0,0,0
+Quanta production by activity type
+10,12,Multiple Quanta Population Module,502,519,75,30,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,13,4,3,1,0,0,0,0,192,0,-1--1--1,,1|(554,422)|
+10,14,"Ventilation-UV Module",692,434,75,30,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,15,14,4,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+///---\\\
+:GRAPH Population
+:TITLE Population
+:X-AXIS Time
+:SCALE
+:VAR "Symptomatic / Infectious"
+:VAR Susceptibles
+:VAR Asyptomatic
+:VAR Recovered
+
+:TABLE Droplet_Concentrations
+:TITLE Droplet Concentrations
+:PRETTYNUM
+:NOTIME
+:FIRST-CELLWIDTH 30
+:CELLWIDTH 14
+:FONT Times New Roman|12||0-0-0
+:VAR "0.8 Droplet Concentration"
+:VAR "1.8 Droplet Concentration"
+:VAR "3.5 Droplet Concentration"
+:VAR "5.5 Droplet Concentration"
+:COMLINE in Number of particles per cm3
+
+:GRAPH Quanta_Drop_Sizes
+:TITLE Quanta Drop Sizes
+:X-AXIS Time
+:SCALE
+:VAR "Quanta Size 0.8"
+:VAR "Quanta Size 1.8"
+:VAR "Quanta Size 3.5"
+:VAR "Quanta Size 5.5"
+
+:TABLE Breathing_Rate
+:TITLE Breathing Rate
+:PRETTYNUM
+:NOTIME
+:FIRST-CELLWIDTH 30
+:CELLWIDTH 14
+:FONT Times New Roman|12||0-0-0
+:VAR breathing rate infected
+:VAR breathing rate susceptibles
+:COMLINE in m3/h
+
+:GRAPH Surviving_fraction
+:TITLE Surviving fraction
+:X-AXIS Time
+:X-MIN 0
+:X-MAX 3.5
+:SCALE
+:VAR Infective particles surviving fraction
+
+:GRAPH Adjustment_time
+:TITLE Adjustment time
+:X-AXIS time
+:X-MIN 0.001
+:X-MAX 4
+:SCALE
+:VAR Adjustment Time
+
+:GRAPH Quanta_Rates
+:TITLE Quanta Rates
+:X-AXIS Time
+:SCALE
+:VAR quanta loss due to deactivation
+:VAR quanta loss due to filters
+:VAR quanta loss due to settling
+:VAR quanta loss due to ventilation
+:VAR quanta loss due to Ventilator UV
+:VAR quanta production rate
+:L<%^E!@
+1:SD-Vent.vdfx
+4:Time
+5:quanta loss due to deactivation
+9:SD-Vent
+19:100,2
+24:0
+25:30
+26:30
+23:0
+15:0,0,0,5,0,0
+27:0,
+34:0,
+42:1
+72:0
+73:0
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:7
+41:0
+95:0
+96:0
+97:0
+77:0
+78:0
+102:1
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
+103:8,8,8,3,8
+105:0,0,0,0,0,0,0,0,0,0
+104:Arial|12||0-0-0|0-0-0|-1--1--1|0-0-255|192-192-192|-1--1--1
